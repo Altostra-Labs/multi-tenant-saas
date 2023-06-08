@@ -142,14 +142,99 @@
 					"accessLevel": "private",
 					"filesSources": [
 						{
-							"path": "clients/Admin/dist/out-tsc",
+							"path": "clients/Admin/dist",
 							"type": "files-source.project-dir"
 						}
 					],
 					"id": "AdminAppBucket"
+				},
+				"AdminAppSite": {
+					"type": "resource.cdn",
+					"name": "AdminAppSite",
+					"defaultRoot": "index.html",
+					"isSPA": true,
+					"tls": {
+						"useTLS": true,
+						"httpRedirection": false
+					},
+					"id": "AdminAppSite"
+				},
+				"AppBucket": {
+					"type": "resource.file-store",
+					"name": "AdminAppBucket",
+					"accessLevel": "private",
+					"filesSources": [
+						{
+							"path": "clients/Application/dist",
+							"type": "files-source.project-dir"
+						}
+					],
+					"id": "AppBucket"
+				},
+				"ApplicationSite": {
+					"type": "resource.cdn",
+					"name": "AdminAppSite",
+					"defaultRoot": "index.html",
+					"isSPA": true,
+					"tls": {
+						"useTLS": true,
+						"httpRedirection": false
+					},
+					"id": "ApplicationSite"
+				},
+				"LandingApplicationSite": {
+					"type": "resource.cdn",
+					"name": "AdminAppSite",
+					"defaultRoot": "index.html",
+					"isSPA": true,
+					"tls": {
+						"useTLS": true,
+						"httpRedirection": false
+					},
+					"id": "LandingApplicationSite"
+				},
+				"LandingAppBucket": {
+					"type": "resource.file-store",
+					"name": "AdminAppBucket",
+					"accessLevel": "private",
+					"filesSources": [
+						{
+							"path": "clients/Landing/dist",
+							"type": "files-source.project-dir"
+						}
+					],
+					"id": "LandingAppBucket"
 				}
 			},
-			"connections": {},
+			"connections": {
+				"AdminAppSite": {
+					"AdminAppBucket": {
+						"type": "connection.dependency.cdn-storage",
+						"bucketRoot": "",
+						"route": "",
+						"from": "AdminAppSite",
+						"to": "AdminAppBucket"
+					}
+				},
+				"ApplicationSite": {
+					"AppBucket": {
+						"type": "connection.dependency.cdn-storage",
+						"bucketRoot": "",
+						"route": "",
+						"from": "ApplicationSite",
+						"to": "AppBucket"
+					}
+				},
+				"LandingApplicationSite": {
+					"LandingAppBucket": {
+						"type": "connection.dependency.cdn-storage",
+						"bucketRoot": "",
+						"route": "",
+						"from": "LandingApplicationSite",
+						"to": "LandingAppBucket"
+					}
+				}
+			},
 			"metadata": {
 				"designer": {
 					"resourcePositions": {
@@ -176,6 +261,31 @@
 						"AdminAppBucket": {
 							"x": 2002.7777777777778,
 							"y": 318.2222222222222,
+							"z": 0
+						},
+						"AdminAppSite": {
+							"x": 1694.9999694824219,
+							"y": 323.7777633666992,
+							"z": 0
+						},
+						"AppBucket": {
+							"x": 2052.777777777778,
+							"y": 368.2222222222222,
+							"z": 0
+						},
+						"ApplicationSite": {
+							"x": 1744.9999694824219,
+							"y": 373.7777633666992,
+							"z": 0
+						},
+						"LandingApplicationSite": {
+							"x": 1794.9999694824219,
+							"y": 423.7777633666992,
+							"z": 0
+						},
+						"LandingAppBucket": {
+							"x": 2102.777777777778,
+							"y": 418.2222222222222,
 							"z": 0
 						}
 					}
