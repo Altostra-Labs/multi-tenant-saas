@@ -1,0 +1,22 @@
+{
+	"id": "multi-tenant-saas",
+	"name": "multi-tenant-saas",
+	"type": "altostra",
+	"description": "An empty project template",
+	"created": "2023-06-08T15:05:49.303Z",
+	"blueprints": [
+		{
+			"version": "2019-10-24",
+			"connections": {},
+			"resources": {},
+			"metadata": {
+				"designer": {
+					"resourcePositions": {}
+				}
+			},
+			"id": "multi-tenant-saas",
+			"name": "multi-tenant-saas",
+			"unsafe": false
+		}
+	]
+}
