@@ -1,0 +1,21 @@
+{
+  "id": "multi-tenant-saas-hb10pfb",
+  "name": "multi-tenant-saas",
+  "created": "2023-06-08T15:08:13.967Z",
+  "description": "",
+  "blueprints": [
+    {
+      "version": "2019-10-24",
+      "connections": {},
+      "resources": {},
+      "metadata": {
+        "designer": {
+          "resourcePositions": {}
+        }
+      },
+      "id": "multi-tenant-saas-ha00pkm",
+      "name": "multi-tenant-saas"
+    }
+  ],
+  "type": "altostra"
+}
