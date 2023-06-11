@@ -9,6 +9,9 @@ full access to all DynamoDB tables of the account in the region 😖), we will j
 authenticate the request, and give lambdas fine-grained access
 - No alarms. 
 - No deployments.
+- No APIs policies, and blocking access on a IAM basis
+- No throttling support (no support for API-KEYs or usage plans)
+- Authorizer must be lambda authorizer (rather than token)
 
 ## Installation
 

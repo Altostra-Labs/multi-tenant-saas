@@ -755,6 +755,287 @@
 						"variables": {}
 					},
 					"id": "UpdateTenantStackMapTableFunction01"
+				},
+				"AdminApiGatewayApi": {
+					"type": "resource.api",
+					"name": "AdminApiGatewayApi",
+					"cors": {
+						"type": "api.cors.simple",
+						"origins": "*"
+					},
+					"endpoints": [
+						{
+							"type": "ref",
+							"id": "ApiEndpoint01"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint02"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint03"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint04"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint05"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint06"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint07"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint08"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint09"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint10"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint11"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint12"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint13"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint14"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint15"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint16"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint17"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint18"
+						}
+					],
+					"id": "AdminApiGatewayApi"
+				},
+				"ApiEndpoint01": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "POST",
+					"path": "/registration",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint01"
+				},
+				"ApiEndpoint02": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "POST",
+					"path": "/provisioning",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint02"
+				},
+				"ApiEndpoint03": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "PUT",
+					"path": "/provisioning/{tenantid}",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint03"
+				},
+				"ApiEndpoint04": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "PUT",
+					"path": "/tenant/activation/{tenantid}",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint04"
+				},
+				"ApiEndpoint05": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "GET",
+					"path": "/tenants",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint05"
+				},
+				"ApiEndpoint06": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "POST",
+					"path": "/tenant",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint06"
+				},
+				"ApiEndpoint07": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "GET",
+					"path": "/tenant/init/{tenantname}",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint07"
+				},
+				"ApiEndpoint08": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "GET",
+					"path": "/tenant/{tenantid}",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint08"
+				},
+				"ApiEndpoint09": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "DELETE",
+					"path": "/tenant/{tenantid}",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint09"
+				},
+				"ApiEndpoint10": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "PUT",
+					"path": "/tenant/{tenantid}",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint10"
+				},
+				"ApiEndpoint11": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "GET",
+					"path": "/user/{username}",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint11"
+				},
+				"ApiEndpoint12": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "PUT",
+					"path": "/user/{username}",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint12"
+				},
+				"ApiEndpoint13": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "DELETE",
+					"path": "/user/{username}",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint13"
+				},
+				"ApiEndpoint14": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "POST",
+					"path": "/user/tenant-admin",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint14"
+				},
+				"ApiEndpoint15": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "POST",
+					"path": "/user",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint15"
+				},
+				"ApiEndpoint16": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "GET",
+					"path": "/users",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint16"
+				},
+				"ApiEndpoint17": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "PUT",
+					"path": "/users/disable",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint17"
+				},
+				"ApiEndpoint18": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "PUT",
+					"path": "/users/enable",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"id": "ApiEndpoint18"
 				}
 			},
 			"connections": {
@@ -1156,159 +1437,300 @@
 						"from": "UpdateTenantStackMapTableFunction01",
 						"to": "TenantStackMappingTable"
 					}
+				},
+				"ApiEndpoint01": {
+					"RegisterTenantFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint01",
+						"to": "RegisterTenantFunction01"
+					}
+				},
+				"ApiEndpoint02": {
+					"ProvisionTenantFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint02",
+						"to": "ProvisionTenantFunction01"
+					}
+				},
+				"ApiEndpoint03": {
+					"DeProvisionTenantFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint03",
+						"to": "DeProvisionTenantFunction01"
+					}
+				},
+				"ApiEndpoint04": {
+					"ActivateTenantFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint04",
+						"to": "ActivateTenantFunction01"
+					}
+				},
+				"ApiEndpoint05": {
+					"GetTenantsFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint05",
+						"to": "GetTenantsFunction01"
+					}
+				},
+				"ApiEndpoint06": {
+					"CreateTenantFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint06",
+						"to": "CreateTenantFunction01"
+					}
+				},
+				"ApiEndpoint07": {
+					"GetTenantConfigFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint07",
+						"to": "GetTenantConfigFunction01"
+					}
+				},
+				"ApiEndpoint08": {
+					"GetTenantFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint08",
+						"to": "GetTenantFunction01"
+					}
+				},
+				"ApiEndpoint09": {
+					"DeactivateTenantFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint09",
+						"to": "DeactivateTenantFunction01"
+					}
+				},
+				"ApiEndpoint10": {
+					"UpdateTenantFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint10",
+						"to": "UpdateTenantFunction01"
+					}
+				},
+				"ApiEndpoint11": {
+					"GetUserFunction": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint11",
+						"to": "GetUserFunction"
+					}
+				},
+				"ApiEndpoint12": {
+					"UpdateUserFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint12",
+						"to": "UpdateUserFunction01"
+					}
+				},
+				"ApiEndpoint13": {
+					"DisableUserFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint13",
+						"to": "DisableUserFunction01"
+					}
+				},
+				"ApiEndpoint14": {
+					"CreateTenantAdminUserFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint14",
+						"to": "CreateTenantAdminUserFunction01"
+					}
+				},
+				"ApiEndpoint15": {
+					"CreateUserFunction01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint15",
+						"to": "CreateUserFunction01"
+					}
+				},
+				"ApiEndpoint16": {
+					"GetUsersFunction": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint16",
+						"to": "GetUsersFunction"
+					}
+				},
+				"ApiEndpoint17": {
+					"DisableUsersByTenantFunction": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint17",
+						"to": "DisableUsersByTenantFunction"
+					}
+				},
+				"ApiEndpoint18": {
+					"EnableUsersByTenantFunction": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint18",
+						"to": "EnableUsersByTenantFunction"
+					}
+				},
+				"AdminApiGatewayApi": {
+					"SharedServicesAuthorizerFunction01": {
+						"type": "connection.api.authorizer",
+						"from": "AdminApiGatewayApi",
+						"to": "SharedServicesAuthorizerFunction01",
+						"cacheBehavior": {
+							"cacheTimeout": 60
+						}
+					}
 				}
 			},
 			"metadata": {
 				"designer": {
 					"resourcePositions": {
 						"ServerlessSaaSSettingsTable": {
-							"x": 407.5000305175781,
-							"y": 31.399993896484375,
+							"x": 788.7501220703125,
+							"y": -318.5999984741211,
 							"z": 0
 						},
 						"TenantStackMappingTable": {
-							"x": 658.6492614746094,
-							"y": 31.892532348632812,
+							"x": 1360.7323608398438,
+							"y": -130.60747146606445,
 							"z": 0
 						},
 						"TenantDetailsTable": {
-							"x": 989.5973205566406,
-							"y": 27.44903564453125,
+							"x": 267.3753356933594,
+							"y": 696.8934020996094,
 							"z": 0
 						},
 						"TenantUserMappingTable": {
-							"x": 1269.471923828125,
-							"y": 29.133018493652344,
+							"x": 222.24984741210938,
+							"y": 27.744117736816406,
 							"z": 0
 						},
 						"MyImportePool01": {
-							"x": 1261.0135498046875,
-							"y": -72.98648834228516,
+							"x": 1133.9302368164062,
+							"y": -266.7364730834961,
 							"z": 0
 						},
 						"SharedServicesAuthorizerFunction01": {
-							"x": 1265.0521240234375,
-							"y": 175.930908203125,
+							"x": 174.07992553710938,
+							"y": 97.45868682861328,
 							"z": 0
 						},
 						"BusinessServicesAuthorizerFunction01": {
-							"x": 1258.9000244140625,
-							"y": 116.01999999999998,
+							"x": 206.816650390625,
+							"y": 838.936637878418,
 							"z": 0
 						},
 						"AuthorizerPolicy01": {
-							"x": 1093.1051635742188,
-							"y": -143.97998428344727,
+							"x": 452.7642517089844,
+							"y": -447.38904190063477,
 							"z": 0
 						},
 						"CreateTenantAdminUserFunction01": {
-							"x": 886.5,
-							"y": 106.6199951171875,
+							"x": -386.5234832763672,
+							"y": 378.6285629272461,
 							"z": 0
 						},
 						"AllowCognitoIDP": {
-							"x": 875.3204956054688,
-							"y": -140.40564346313477,
+							"x": 234.97958374023438,
+							"y": -443.81470108032227,
 							"z": 0
 						},
 						"CreateUserFunction01": {
-							"x": 896.9000244140625,
-							"y": 168.01998901367188,
+							"x": 737.8188171386719,
+							"y": 442.27212142944336,
 							"z": 0
 						},
 						"UpdateUserFunction01": {
-							"x": 598.9000244140625,
-							"y": 104.01998901367188,
+							"x": -387.58506774902344,
+							"y": 480.6759567260742,
 							"z": 0
 						},
 						"DisableUserFunction01": {
-							"x": 598.9000244140625,
-							"y": 176.01999999999998,
+							"x": -385.9824676513672,
+							"y": 531.3618850708008,
 							"z": 0
 						},
 						"DisableUsersByTenantFunction": {
-							"x": 598.9000244140625,
-							"y": 238.02000427246094,
+							"x": 735.6521301269531,
+							"y": 496.7273292541504,
 							"z": 0
 						},
 						"EnableUsersByTenantFunction": {
-							"x": 598.9000244140625,
-							"y": 292.0199890136719,
+							"x": 738.2162170410156,
+							"y": 554.4130973815918,
 							"z": 0
 						},
 						"GetUserFunction": {
-							"x": 594.9000244140625,
-							"y": 348.0199890136719,
+							"x": -385.6555633544922,
+							"y": 426.4387741088867,
 							"z": 0
 						},
 						"GetUsersFunction": {
-							"x": 596.9000244140625,
-							"y": 404.02001953125,
+							"x": -391.66831970214844,
+							"y": 589.8106460571289,
 							"z": 0
 						},
 						"CreateTenantFunction01": {
-							"x": 346.8333435058594,
-							"y": 101.79999542236328,
+							"x": -382.76060485839844,
+							"y": 222.20597076416016,
 							"z": 0
 						},
 						"ActivateTenantFunction01": {
-							"x": 343.5066223144531,
-							"y": 155.3466567993164,
+							"x": 738.9125671386719,
+							"y": 235.52824783325195,
 							"z": 0
 						},
 						"GetTenantFunction01": {
-							"x": 344.8399658203125,
-							"y": 207.34667205810547,
+							"x": 741.3677062988281,
+							"y": 287.20776748657227,
 							"z": 0
 						},
 						"DeactivateTenantFunction01": {
-							"x": 339.50665283203125,
-							"y": 256.67999267578125,
+							"x": 736.5151062011719,
+							"y": 338.30390548706055,
 							"z": 0
 						},
 						"UpdateTenantFunction01": {
-							"x": 335.50665283203125,
-							"y": 307.3466567993164,
+							"x": 738.4446716308594,
+							"y": 389.7718391418457,
 							"z": 0
 						},
 						"GetTenantsFunction01": {
-							"x": 336.8399658203125,
-							"y": 355.3466796875,
+							"x": -385.70274353027344,
+							"y": 323.34883880615234,
 							"z": 0
 						},
 						"GetTenantConfigFunction01": {
-							"x": 334.17333984375,
-							"y": 407.34666442871094,
+							"x": -384.84373474121094,
+							"y": 271.0218734741211,
 							"z": 0
 						},
 						"AssumeRole01": {
-							"x": 691.2307434082031,
-							"y": -139.15385818481445,
+							"x": 50.88983154296875,
+							"y": -442.56291580200195,
 							"z": 0
 						},
 						"RegisterTenantFunction01": {
-							"x": 1083.5385131835938,
-							"y": 255.46154022216797,
+							"x": 741.1241149902344,
+							"y": 184.36111068725586,
 							"z": 0
 						},
 						"ProvisionTenantFunction01": {
-							"x": 1079.6922912597656,
-							"y": 306.48717498779297,
+							"x": 743.3674621582031,
+							"y": 129.61748886108398,
 							"z": 0
 						},
 						"DeProvisionTenantFunction01": {
-							"x": 1069.6922912597656,
-							"y": 351.61539459228516,
+							"x": -381.8568572998047,
+							"y": 169.45724487304688,
 							"z": 0
 						},
 						"UpdateSettingsTableFunction01": {
-							"x": 1065.84619140625,
-							"y": 400.3333511352539,
+							"x": 132.512939453125,
+							"y": -122.58330690860748,
 							"z": 0
 						},
 						"UpdateTenantStackMapTableFunction01": {
-							"x": 1040.2051086425781,
-							"y": 450.3333206176758,
+							"x": 1388.1217651367188,
+							"y": -332.9999465942383,
+							"z": 0
+						},
+						"AdminApiGatewayApi": {
+							"x": 218.81631469726562,
+							"y": 155.54698944091797,
 							"z": 0
 						}
 					}
