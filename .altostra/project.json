@@ -13,7 +13,7 @@
 			"resources": {
 				"ServerlessSaaSSettingsTable": {
 					"id": "ServerlessSaaSSettingsTable",
-					"name": "ServerlessSaaS-Settings",
+					"name": "Settings",
 					"tableName": "ServerlessSaaS-Settings",
 					"key": {
 						"hash": {
@@ -32,7 +32,7 @@
 				},
 				"TenantStackMappingTable": {
 					"id": "TenantStackMappingTable",
-					"name": "ServerlessSaaS-TenantStackMapping",
+					"name": "TenantStackMapping",
 					"tableName": "ServerlessSaaS-TenantStackMapping",
 					"key": {
 						"hash": {
@@ -51,7 +51,7 @@
 				},
 				"TenantDetailsTable": {
 					"id": "TenantDetailsTable",
-					"name": "ServerlessSaaS-TenantDetails",
+					"name": "TenantDetails",
 					"tableName": "ServerlessSaaS-TenantDetails",
 					"key": {
 						"hash": {
@@ -93,7 +93,7 @@
 				},
 				"TenantUserMappingTable": {
 					"id": "TenantUserMappingTable",
-					"name": "ServerlessSaaS-TenantUserMapping",
+					"name": "TenantUserMapping",
 					"tableName": "ServerlessSaaS-TenantUserMapping",
 					"key": {
 						"hash": {
@@ -138,13 +138,315 @@
 				},
 				"MyImportePool01": {
 					"type": "resource.external",
-					"name": "my-importe-pool",
+					"name": "my-imported-pool",
 					"externalResourceType": "resource.cognito.user-pool",
 					"identifier": "arn:aws:cognito-idp:us-east-1:123456789012:userpool/us-east-1_Abcd12abc",
 					"id": "MyImportePool01"
+				},
+				"SharedServicesAuthorizerFunction01": {
+					"type": "resource.compute.function",
+					"name": "SharedServicesAuthorizerFunction",
+					"memory": 256,
+					"timeout": 29,
+					"entryPoint": "src/Resources/shared_service_authorizer.lambda_handler",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"OPERATION_USERS_API_KEY": "",
+							"OPERATION_USERS_APP_CLIENT": "",
+							"OPERATION_USERS_USER_POOL": ""
+						}
+					},
+					"id": "SharedServicesAuthorizerFunction01"
+				},
+				"BusinessServicesAuthorizerFunction01": {
+					"type": "resource.compute.function",
+					"name": "BusinessServicesAuthorizerFunction",
+					"memory": 256,
+					"timeout": 29,
+					"entryPoint": "src/Resources/tenant_authorizer.lambda_handler",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"OPERATION_USERS_API_KEY": "",
+							"OPERATION_USERS_APP_CLIENT": "",
+							"OPERATION_USERS_USER_POOL": ""
+						}
+					},
+					"id": "BusinessServicesAuthorizerFunction01"
+				},
+				"AuthorizerPolicy01": {
+					"type": "resource.access.policy",
+					"name": "AuthorizerPolicy",
+					"policyDocument": {
+						"Version": "2012-10-17",
+						"Statement": [
+							{
+								"Effect": "Allow",
+								"Action": [
+									"cognito-idp:List*"
+								],
+								"Resource": [
+									{
+										"Fn::Sub": "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/*"
+									}
+								]
+							}
+						]
+					},
+					"id": "AuthorizerPolicy01"
+				},
+				"CreateTenantAdminUserFunction01": {
+					"type": "resource.compute.function",
+					"name": "CreateTenantAdminUserFunction",
+					"memory": 512,
+					"timeout": 6,
+					"entryPoint": "src/TenantManagementService/user-management.create_tenant_admin_user",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "UserManagement.CreateTenantAdmin",
+							"TENANT_USER_POOL_CALLBACK_URL": "",
+							"TENANT_APP_CLIENT_ID": "",
+							"TENANT_USER_POOL_ID": ""
+						}
+					},
+					"id": "CreateTenantAdminUserFunction01"
+				},
+				"AllowCognitoIDP": {
+					"type": "resource.access.policy",
+					"name": "AllowCognitoIDP",
+					"policyDocument": {
+						"Version": "2012-10-17",
+						"Statement": [
+							{
+								"Effect": "Allow",
+								"Action": [
+									"cognito-idp:*"
+								],
+								"Resource": "*"
+							}
+						]
+					},
+					"id": "AllowCognitoIDP"
+				},
+				"CreateUserFunction01": {
+					"type": "resource.compute.function",
+					"name": "CreateUserFunction",
+					"memory": 256,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/user-management.create_user",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "UserManagement.CreateUser"
+						}
+					},
+					"id": "CreateUserFunction01"
+				},
+				"UpdateUserFunction01": {
+					"type": "resource.compute.function",
+					"name": "UpdateUserFunction",
+					"memory": 256,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/user-management.update_user",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "UserManagement.UpdateUser"
+						}
+					},
+					"id": "UpdateUserFunction01"
+				},
+				"DisableUserFunction01": {
+					"type": "resource.compute.function",
+					"name": "DisableUserFunction",
+					"memory": 256,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/user-management.disable_user",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "UserManagement.DisableUser"
+						}
+					},
+					"id": "DisableUserFunction01"
 				}
 			},
-			"connections": {},
+			"connections": {
+				"SharedServicesAuthorizerFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "SharedServicesAuthorizerFunction01",
+						"to": "TenantDetailsTable"
+					}
+				},
+				"BusinessServicesAuthorizerFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "BusinessServicesAuthorizerFunction01",
+						"to": "TenantDetailsTable"
+					}
+				},
+				"AuthorizerPolicy01": {
+					"BusinessServicesAuthorizerFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AuthorizerPolicy01",
+						"to": "BusinessServicesAuthorizerFunction01"
+					},
+					"SharedServicesAuthorizerFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AuthorizerPolicy01",
+						"to": "SharedServicesAuthorizerFunction01"
+					}
+				},
+				"AllowCognitoIDP": {
+					"CreateTenantAdminUserFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AllowCognitoIDP",
+						"to": "CreateTenantAdminUserFunction01"
+					},
+					"CreateUserFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AllowCognitoIDP",
+						"to": "CreateUserFunction01"
+					},
+					"UpdateUserFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AllowCognitoIDP",
+						"to": "UpdateUserFunction01"
+					},
+					"DisableUserFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AllowCognitoIDP",
+						"to": "DisableUserFunction01"
+					}
+				},
+				"CreateTenantAdminUserFunction01": {
+					"TenantUserMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "write-only",
+						"from": "CreateTenantAdminUserFunction01",
+						"to": "TenantUserMappingTable"
+					},
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "CreateTenantAdminUserFunction01",
+						"to": "TenantDetailsTable"
+					}
+				},
+				"CreateUserFunction01": {
+					"TenantUserMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "write-only",
+						"from": "CreateUserFunction01",
+						"to": "TenantUserMappingTable"
+					},
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "CreateUserFunction01",
+						"to": "TenantDetailsTable"
+					}
+				},
+				"UpdateUserFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "UpdateUserFunction01",
+						"to": "TenantDetailsTable"
+					},
+					"TenantUserMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "UpdateUserFunction01",
+						"to": "TenantUserMappingTable"
+					}
+				},
+				"DisableUserFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "DisableUserFunction01",
+						"to": "TenantDetailsTable"
+					},
+					"TenantUserMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "DisableUserFunction01",
+						"to": "TenantUserMappingTable"
+					}
+				}
+			},
 			"metadata": {
 				"designer": {
 					"resourcePositions": {
@@ -154,23 +456,63 @@
 							"z": 0
 						},
 						"TenantStackMappingTable": {
-							"x": 888.5,
-							"y": 30.399993896484375,
+							"x": 658.6492614746094,
+							"y": 31.892532348632812,
 							"z": 0
 						},
 						"TenantDetailsTable": {
-							"x": 1536.2142639160156,
-							"y": 22.971420288085938,
+							"x": 990.9306640625,
+							"y": 27.44903564453125,
 							"z": 0
 						},
 						"TenantUserMappingTable": {
-							"x": 2228.2778930664062,
-							"y": 22.17779541015625,
+							"x": 1289.471923828125,
+							"y": 31.133018493652344,
 							"z": 0
 						},
 						"MyImportePool01": {
 							"x": 1261.0135498046875,
 							"y": -72.98648834228516,
+							"z": 0
+						},
+						"SharedServicesAuthorizerFunction01": {
+							"x": 1265.0521240234375,
+							"y": 175.930908203125,
+							"z": 0
+						},
+						"BusinessServicesAuthorizerFunction01": {
+							"x": 1258.9000244140625,
+							"y": 116.01999999999998,
+							"z": 0
+						},
+						"AuthorizerPolicy01": {
+							"x": 964.9000244140625,
+							"y": -143.97998011112213,
+							"z": 0
+						},
+						"CreateTenantAdminUserFunction01": {
+							"x": 886.5,
+							"y": 106.6199951171875,
+							"z": 0
+						},
+						"AllowCognitoIDP": {
+							"x": 712.5,
+							"y": -149.38000440597534,
+							"z": 0
+						},
+						"CreateUserFunction01": {
+							"x": 896.9000244140625,
+							"y": 168.01998901367188,
+							"z": 0
+						},
+						"UpdateUserFunction01": {
+							"x": 598.9000244140625,
+							"y": 104.01998901367188,
+							"z": 0
+						},
+						"DisableUserFunction01": {
+							"x": 598.9000244140625,
+							"y": 176.01999999999998,
 							"z": 0
 						}
 					}
@@ -180,7 +522,36 @@
 			"parameters": {
 				"POOL_ID": {
 					"paths": [
-						"resources/MyImportePool01/identifier"
+						"resources/MyImportePool01/identifier",
+						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_USER_POOL_ID"
+					]
+				},
+				"ApiKeyOperationUsersParameter": {
+					"paths": [
+						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_API_KEY",
+						"resources/BusinessServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_API_KEY"
+					]
+				},
+				"CognitoOperationUsersUserPoolClientId": {
+					"paths": [
+						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_APP_CLIENT",
+						"resources/BusinessServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_APP_CLIENT"
+					]
+				},
+				"CognitoOperationUsersUserPoolId": {
+					"paths": [
+						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_USER_POOL",
+						"resources/BusinessServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_USER_POOL"
+					]
+				},
+				"TENANT_USER_POOL_CALLBACK_URL": {
+					"paths": [
+						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_USER_POOL_CALLBACK_URL"
+					]
+				},
+				"TENANT_APP_CLIENT_ID": {
+					"paths": [
+						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_APP_CLIENT_ID"
 					]
 				}
 			},
