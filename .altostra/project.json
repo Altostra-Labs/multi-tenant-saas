@@ -136,12 +136,12 @@
 					},
 					"type": "resource.table"
 				},
-				"MyImportePool01": {
+				"MyImportedPool01": {
 					"type": "resource.external",
 					"name": "my-imported-pool",
 					"externalResourceType": "resource.cognito.user-pool",
 					"identifier": "arn:aws:cognito-idp:us-east-1:123456789012:userpool/us-east-1_Abcd12abc",
-					"id": "MyImportePool01"
+					"id": "MyImportedPool01"
 				},
 				"SharedServicesAuthorizerFunction01": {
 					"type": "resource.compute.function",
@@ -1579,28 +1579,28 @@
 				"designer": {
 					"resourcePositions": {
 						"ServerlessSaaSSettingsTable": {
-							"x": 788.7501220703125,
-							"y": -318.5999984741211,
+							"x": 220,
+							"y": -36.781829833984375,
 							"z": 0
 						},
 						"TenantStackMappingTable": {
-							"x": 1360.7323608398438,
-							"y": -130.60747146606445,
+							"x": 220,
+							"y": 726.210693359375,
 							"z": 0
 						},
 						"TenantDetailsTable": {
-							"x": 267.3753356933594,
-							"y": 696.8934020996094,
+							"x": 220,
+							"y": 33.25709533691406,
 							"z": 0
 						},
 						"TenantUserMappingTable": {
-							"x": 222.24984741210938,
-							"y": 27.744117736816406,
+							"x": 220,
+							"y": 666.3805236816406,
 							"z": 0
 						},
-						"MyImportePool01": {
-							"x": 1133.9302368164062,
-							"y": -266.7364730834961,
+						"MyImportedPool01": {
+							"x": 224.83929443359375,
+							"y": -105.37284088134766,
 							"z": 0
 						},
 						"SharedServicesAuthorizerFunction01": {
@@ -1609,127 +1609,127 @@
 							"z": 0
 						},
 						"BusinessServicesAuthorizerFunction01": {
-							"x": 206.816650390625,
-							"y": 838.936637878418,
+							"x": -390,
+							"y": 30,
 							"z": 0
 						},
 						"AuthorizerPolicy01": {
-							"x": 452.7642517089844,
-							"y": -447.38904190063477,
+							"x": 422.45457458496094,
+							"y": -218.18181991577148,
 							"z": 0
 						},
 						"CreateTenantAdminUserFunction01": {
-							"x": -386.5234832763672,
-							"y": 378.6285629272461,
+							"x": -390,
+							"y": 380,
 							"z": 0
 						},
 						"AllowCognitoIDP": {
-							"x": 234.97958374023438,
-							"y": -443.81470108032227,
+							"x": 204.45457458496094,
+							"y": -218.18181991577148,
 							"z": 0
 						},
 						"CreateUserFunction01": {
-							"x": 737.8188171386719,
-							"y": 442.27212142944336,
+							"x": 760,
+							"y": 440,
 							"z": 0
 						},
 						"UpdateUserFunction01": {
-							"x": -387.58506774902344,
-							"y": 480.6759567260742,
+							"x": -390,
+							"y": 480,
 							"z": 0
 						},
 						"DisableUserFunction01": {
-							"x": -385.9824676513672,
-							"y": 531.3618850708008,
+							"x": -390,
+							"y": 530,
 							"z": 0
 						},
 						"DisableUsersByTenantFunction": {
-							"x": 735.6521301269531,
-							"y": 496.7273292541504,
+							"x": 760,
+							"y": 490,
 							"z": 0
 						},
 						"EnableUsersByTenantFunction": {
-							"x": 738.2162170410156,
-							"y": 554.4130973815918,
+							"x": 760,
+							"y": 540,
 							"z": 0
 						},
 						"GetUserFunction": {
-							"x": -385.6555633544922,
-							"y": 426.4387741088867,
+							"x": -390,
+							"y": 430,
 							"z": 0
 						},
 						"GetUsersFunction": {
-							"x": -391.66831970214844,
-							"y": 589.8106460571289,
+							"x": -390,
+							"y": 580,
 							"z": 0
 						},
 						"CreateTenantFunction01": {
-							"x": -382.76060485839844,
-							"y": 222.20597076416016,
+							"x": -390,
+							"y": 230,
 							"z": 0
 						},
 						"ActivateTenantFunction01": {
-							"x": 738.9125671386719,
-							"y": 235.52824783325195,
+							"x": 760,
+							"y": 240,
 							"z": 0
 						},
 						"GetTenantFunction01": {
-							"x": 741.3677062988281,
-							"y": 287.20776748657227,
+							"x": 760,
+							"y": 290,
 							"z": 0
 						},
 						"DeactivateTenantFunction01": {
-							"x": 736.5151062011719,
-							"y": 338.30390548706055,
+							"x": 760,
+							"y": 340,
 							"z": 0
 						},
 						"UpdateTenantFunction01": {
-							"x": 738.4446716308594,
-							"y": 389.7718391418457,
+							"x": 760,
+							"y": 390,
 							"z": 0
 						},
 						"GetTenantsFunction01": {
-							"x": -385.70274353027344,
-							"y": 323.34883880615234,
+							"x": -390,
+							"y": 330,
 							"z": 0
 						},
 						"GetTenantConfigFunction01": {
-							"x": -384.84373474121094,
-							"y": 271.0218734741211,
+							"x": -390,
+							"y": 280,
 							"z": 0
 						},
 						"AssumeRole01": {
-							"x": 50.88983154296875,
-							"y": -442.56291580200195,
+							"x": 20.454574584960938,
+							"y": -218.18181991577148,
 							"z": 0
 						},
 						"RegisterTenantFunction01": {
-							"x": 741.1241149902344,
-							"y": 184.36111068725586,
+							"x": 760,
+							"y": 190,
 							"z": 0
 						},
 						"ProvisionTenantFunction01": {
-							"x": 743.3674621582031,
-							"y": 129.61748886108398,
+							"x": 760,
+							"y": 140,
 							"z": 0
 						},
 						"DeProvisionTenantFunction01": {
-							"x": -381.8568572998047,
-							"y": 169.45724487304688,
+							"x": -390,
+							"y": 180,
 							"z": 0
 						},
 						"UpdateSettingsTableFunction01": {
-							"x": 132.512939453125,
-							"y": -122.58330690860748,
+							"x": 760,
+							"y": -50,
 							"z": 0
 						},
 						"UpdateTenantStackMapTableFunction01": {
-							"x": 1388.1217651367188,
-							"y": -332.9999465942383,
+							"x": 760,
+							"y": 730,
 							"z": 0
 						},
 						"AdminApiGatewayApi": {
-							"x": 218.81631469726562,
+							"x": 220,
 							"y": 155.54698944091797,
 							"z": 0
 						}
@@ -1740,7 +1740,7 @@
 			"parameters": {
 				"POOL_ID": {
 					"paths": [
-						"resources/MyImportePool01/identifier",
+						"resources/MyImportedPool01/identifier",
 						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_USER_POOL_ID"
 					]
 				},
