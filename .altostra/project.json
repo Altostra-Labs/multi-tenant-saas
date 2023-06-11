@@ -337,6 +337,106 @@
 						}
 					},
 					"id": "DisableUserFunction01"
+				},
+				"DisableUsersByTenantFunction": {
+					"type": "resource.compute.function",
+					"name": "DisableUsersByTenantFunction",
+					"memory": 256,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/user-management.disable_user",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "UserManagement.DisableUsersByTenant"
+						}
+					},
+					"id": "DisableUsersByTenantFunction"
+				},
+				"EnableUsersByTenantFunction": {
+					"type": "resource.compute.function",
+					"name": "EnableUsersByTenantFunction",
+					"memory": 256,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/user-management.enable_users_by_tenant",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "UserManagement.EnableUsersByTenant"
+						}
+					},
+					"id": "EnableUsersByTenantFunction"
+				},
+				"GetUserFunction": {
+					"type": "resource.compute.function",
+					"name": "GetUserFunction",
+					"memory": 256,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/user-management.get_user",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "UserManagement.GetUser"
+						}
+					},
+					"id": "GetUserFunction"
+				},
+				"GetUsersFunction": {
+					"type": "resource.compute.function",
+					"name": "GetUsersFunction",
+					"memory": 256,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/user-management.get_users",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "UserManagement.GetUsers"
+						}
+					},
+					"id": "GetUsersFunction"
 				}
 			},
 			"connections": {
@@ -388,6 +488,26 @@
 						"type": "connection.access.policy-attachment",
 						"from": "AllowCognitoIDP",
 						"to": "DisableUserFunction01"
+					},
+					"DisableUsersByTenantFunction": {
+						"type": "connection.access.policy-attachment",
+						"from": "AllowCognitoIDP",
+						"to": "DisableUsersByTenantFunction"
+					},
+					"EnableUsersByTenantFunction": {
+						"type": "connection.access.policy-attachment",
+						"from": "AllowCognitoIDP",
+						"to": "EnableUsersByTenantFunction"
+					},
+					"GetUserFunction": {
+						"type": "connection.access.policy-attachment",
+						"from": "AllowCognitoIDP",
+						"to": "GetUserFunction"
+					},
+					"GetUsersFunction": {
+						"type": "connection.access.policy-attachment",
+						"from": "AllowCognitoIDP",
+						"to": "GetUsersFunction"
 					}
 				},
 				"CreateTenantAdminUserFunction01": {
@@ -445,6 +565,62 @@
 						"from": "DisableUserFunction01",
 						"to": "TenantUserMappingTable"
 					}
+				},
+				"DisableUsersByTenantFunction": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "DisableUsersByTenantFunction",
+						"to": "TenantDetailsTable"
+					},
+					"TenantUserMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "DisableUsersByTenantFunction",
+						"to": "TenantUserMappingTable"
+					}
+				},
+				"EnableUsersByTenantFunction": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "EnableUsersByTenantFunction",
+						"to": "TenantDetailsTable"
+					},
+					"TenantUserMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "EnableUsersByTenantFunction",
+						"to": "TenantUserMappingTable"
+					}
+				},
+				"GetUserFunction": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "GetUserFunction",
+						"to": "TenantDetailsTable"
+					},
+					"TenantUserMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "GetUserFunction",
+						"to": "TenantUserMappingTable"
+					}
+				},
+				"GetUsersFunction": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "GetUsersFunction",
+						"to": "TenantDetailsTable"
+					},
+					"TenantUserMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "GetUsersFunction",
+						"to": "TenantUserMappingTable"
+					}
 				}
 			},
 			"metadata": {
@@ -466,8 +642,8 @@
 							"z": 0
 						},
 						"TenantUserMappingTable": {
-							"x": 1289.471923828125,
-							"y": 31.133018493652344,
+							"x": 1269.471923828125,
+							"y": 29.133018493652344,
 							"z": 0
 						},
 						"MyImportePool01": {
@@ -513,6 +689,26 @@
 						"DisableUserFunction01": {
 							"x": 598.9000244140625,
 							"y": 176.01999999999998,
+							"z": 0
+						},
+						"DisableUsersByTenantFunction": {
+							"x": 598.9000244140625,
+							"y": 238.02000427246094,
+							"z": 0
+						},
+						"EnableUsersByTenantFunction": {
+							"x": 598.9000244140625,
+							"y": 292.0199890136719,
+							"z": 0
+						},
+						"GetUserFunction": {
+							"x": 594.9000244140625,
+							"y": 348.0199890136719,
+							"z": 0
+						},
+						"GetUsersFunction": {
+							"x": 596.9000244140625,
+							"y": 404.02001953125,
 							"z": 0
 						}
 					}
