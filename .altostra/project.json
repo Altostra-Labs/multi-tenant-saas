@@ -135,6 +135,13 @@
 						}
 					},
 					"type": "resource.table"
+				},
+				"MyImportePool01": {
+					"type": "resource.external",
+					"name": "my-importe-pool",
+					"externalResourceType": "resource.cognito.user-pool",
+					"identifier": "arn:aws:cognito-idp:us-east-1:123456789012:userpool/us-east-1_Abcd12abc",
+					"id": "MyImportePool01"
 				}
 			},
 			"connections": {},
@@ -160,11 +167,27 @@
 							"x": 2228.2778930664062,
 							"y": 22.17779541015625,
 							"z": 0
+						},
+						"MyImportePool01": {
+							"x": 1261.0135498046875,
+							"y": -72.98648834228516,
+							"z": 0
 						}
 					}
 				}
 			},
-			"unsafe": false
+			"unsafe": false,
+			"parameters": {
+				"POOL_ID": {
+					"paths": [
+						"resources/MyImportePool01/identifier"
+					]
+				}
+			},
+			"globalEnvironmentVariables": {
+				"POWERTOOLS_METRICS_NAMESPACE": "ServerlessSaaS",
+				"LOG_LEVEL": "DEBUG"
+			}
 		}
 	]
 }
