@@ -248,7 +248,7 @@
 				},
 				"AllowCognitoIDP": {
 					"type": "resource.access.policy",
-					"name": "AllowCognitoIDP",
+					"name": "AllowCognitoIDPPolicy",
 					"policyDocument": {
 						"Version": "2012-10-17",
 						"Statement": [
@@ -616,6 +616,145 @@
 						"variables": {}
 					},
 					"id": "GetTenantConfigFunction01"
+				},
+				"AssumeRole01": {
+					"type": "resource.access.policy",
+					"name": "AssumeRolePolicy",
+					"policyDocument": {
+						"Version": "2012-10-17",
+						"Statement": [
+							{
+								"Effect": "Allow",
+								"Action": "sts:AssumeRole",
+								"Resource": "*"
+							}
+						]
+					},
+					"id": "AssumeRole01"
+				},
+				"RegisterTenantFunction01": {
+					"type": "resource.compute.function",
+					"name": "RegisterTenantFunction",
+					"memory": 512,
+					"timeout": 6,
+					"entryPoint": "src/TenantManagementService/tenant-registration.register_tenant",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "TenantRegistration.RegisterTenant",
+							"BASIC_TIER_API_KEY": "",
+							"STANDARD_TIER_API_KEY": "",
+							"PREMIUM_TIER_API_KEY": "",
+							"PLATINUM_TIER_API_KEY": "",
+							"PROVISION_TENANT_RESOURCE_PATH": "/provisioning",
+							"CREATE_TENANT_RESOURCE_PATH": "/tenant",
+							"CREATE_TENANT_ADMIN_USER_RESOURCE_PATH": "/user/tenant-admin"
+						}
+					},
+					"id": "RegisterTenantFunction01"
+				},
+				"ProvisionTenantFunction01": {
+					"type": "resource.compute.function",
+					"name": "ProvisionTenantFunction",
+					"memory": 512,
+					"timeout": 6,
+					"entryPoint": "src/TenantManagementService/tenant-provisioning.provision_tenant",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {}
+					},
+					"id": "ProvisionTenantFunction01"
+				},
+				"DeProvisionTenantFunction01": {
+					"type": "resource.compute.function",
+					"name": "DeProvisionTenantFunction",
+					"memory": 512,
+					"timeout": 6,
+					"entryPoint": "src/TenantManagementService/tenant-provisioning.deprovision_tenant",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {}
+					},
+					"id": "DeProvisionTenantFunction01"
+				},
+				"UpdateSettingsTableFunction01": {
+					"type": "resource.compute.function",
+					"name": "UpdateSettingsTableFunction",
+					"memory": 512,
+					"timeout": 6,
+					"entryPoint": "src/custom_resources/update_settings_table.handler",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {}
+					},
+					"id": "UpdateSettingsTableFunction01"
+				},
+				"UpdateTenantStackMapTableFunction01": {
+					"type": "resource.compute.function",
+					"name": "UpdateTenantStackMapTableFunction",
+					"memory": 512,
+					"timeout": 6,
+					"entryPoint": "src/custom_resources/update_tenantstackmap_table.handler",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {}
+					},
+					"id": "UpdateTenantStackMapTableFunction01"
 				}
 			},
 			"connections": {
@@ -898,6 +1037,125 @@
 						"from": "GetTenantConfigFunction01",
 						"to": "ServerlessSaaSSettingsTable"
 					}
+				},
+				"AssumeRole01": {
+					"ActivateTenantFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "ActivateTenantFunction01"
+					},
+					"CreateTenantFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "CreateTenantFunction01"
+					},
+					"DeactivateTenantFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "DeactivateTenantFunction01"
+					},
+					"GetTenantConfigFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "GetTenantConfigFunction01"
+					},
+					"GetTenantFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "GetTenantFunction01"
+					},
+					"GetTenantsFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "GetTenantsFunction01"
+					},
+					"UpdateTenantFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "UpdateTenantFunction01"
+					},
+					"DisableUserFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "DisableUserFunction01"
+					},
+					"DisableUsersByTenantFunction": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "DisableUsersByTenantFunction"
+					},
+					"EnableUsersByTenantFunction": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "EnableUsersByTenantFunction"
+					},
+					"GetUserFunction": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "GetUserFunction"
+					},
+					"GetUsersFunction": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "GetUsersFunction"
+					},
+					"UpdateUserFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "UpdateUserFunction01"
+					},
+					"ProvisionTenantFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "ProvisionTenantFunction01"
+					},
+					"DeProvisionTenantFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "DeProvisionTenantFunction01"
+					},
+					"UpdateSettingsTableFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "UpdateSettingsTableFunction01"
+					},
+					"UpdateTenantStackMapTableFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AssumeRole01",
+						"to": "UpdateTenantStackMapTableFunction01"
+					}
+				},
+				"ProvisionTenantFunction01": {
+					"TenantStackMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "write-only",
+						"from": "ProvisionTenantFunction01",
+						"to": "TenantStackMappingTable"
+					}
+				},
+				"DeProvisionTenantFunction01": {
+					"TenantStackMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "write-only",
+						"from": "DeProvisionTenantFunction01",
+						"to": "TenantStackMappingTable"
+					}
+				},
+				"UpdateSettingsTableFunction01": {
+					"ServerlessSaaSSettingsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "write-only",
+						"from": "UpdateSettingsTableFunction01",
+						"to": "ServerlessSaaSSettingsTable"
+					}
+				},
+				"UpdateTenantStackMapTableFunction01": {
+					"TenantStackMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "write-only",
+						"from": "UpdateTenantStackMapTableFunction01",
+						"to": "TenantStackMappingTable"
+					}
 				}
 			},
 			"metadata": {
@@ -939,8 +1197,8 @@
 							"z": 0
 						},
 						"AuthorizerPolicy01": {
-							"x": 964.9000244140625,
-							"y": -143.97998011112213,
+							"x": 1093.1051635742188,
+							"y": -143.97998428344727,
 							"z": 0
 						},
 						"CreateTenantAdminUserFunction01": {
@@ -949,8 +1207,8 @@
 							"z": 0
 						},
 						"AllowCognitoIDP": {
-							"x": 712.5,
-							"y": -149.38000440597534,
+							"x": 875.3204956054688,
+							"y": -140.40564346313477,
 							"z": 0
 						},
 						"CreateUserFunction01": {
@@ -1022,6 +1280,36 @@
 							"x": 334.17333984375,
 							"y": 407.34666442871094,
 							"z": 0
+						},
+						"AssumeRole01": {
+							"x": 691.2307434082031,
+							"y": -139.15385818481445,
+							"z": 0
+						},
+						"RegisterTenantFunction01": {
+							"x": 1083.5385131835938,
+							"y": 255.46154022216797,
+							"z": 0
+						},
+						"ProvisionTenantFunction01": {
+							"x": 1079.6922912597656,
+							"y": 306.48717498779297,
+							"z": 0
+						},
+						"DeProvisionTenantFunction01": {
+							"x": 1069.6922912597656,
+							"y": 351.61539459228516,
+							"z": 0
+						},
+						"UpdateSettingsTableFunction01": {
+							"x": 1065.84619140625,
+							"y": 400.3333511352539,
+							"z": 0
+						},
+						"UpdateTenantStackMapTableFunction01": {
+							"x": 1040.2051086425781,
+							"y": 450.3333206176758,
+							"z": 0
 						}
 					}
 				}
@@ -1064,22 +1352,26 @@
 				},
 				"ApiKeyBasicTierParameter": {
 					"paths": [
-						"resources/UpdateTenantFunction01/environment/variables/BASIC_TIER_API_KEY"
+						"resources/UpdateTenantFunction01/environment/variables/BASIC_TIER_API_KEY",
+						"resources/RegisterTenantFunction01/environment/variables/BASIC_TIER_API_KEY"
 					]
 				},
 				"ApiKeyStandardTierParameter": {
 					"paths": [
-						"resources/UpdateTenantFunction01/environment/variables/STANDARD_TIER_API_KEY"
+						"resources/UpdateTenantFunction01/environment/variables/STANDARD_TIER_API_KEY",
+						"resources/RegisterTenantFunction01/environment/variables/STANDARD_TIER_API_KEY"
 					]
 				},
 				"ApiKeyPremiumTierParameter": {
 					"paths": [
-						"resources/UpdateTenantFunction01/environment/variables/PREMIUM_TIER_API_KEY"
+						"resources/UpdateTenantFunction01/environment/variables/PREMIUM_TIER_API_KEY",
+						"resources/RegisterTenantFunction01/environment/variables/PREMIUM_TIER_API_KEY"
 					]
 				},
 				"ApiKeyPlatinumTierParameter": {
 					"paths": [
-						"resources/UpdateTenantFunction01/environment/variables/PLATINUM_TIER_API_KEY"
+						"resources/UpdateTenantFunction01/environment/variables/PLATINUM_TIER_API_KEY",
+						"resources/RegisterTenantFunction01/environment/variables/PLATINUM_TIER_API_KEY"
 					]
 				}
 			},
