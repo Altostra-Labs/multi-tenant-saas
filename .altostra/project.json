@@ -437,6 +437,185 @@
 						}
 					},
 					"id": "GetUsersFunction"
+				},
+				"CreateTenantFunction01": {
+					"type": "resource.compute.function",
+					"name": "CreateTenantFunction",
+					"memory": 512,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/tenant-management.create_tenant",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "TenantManagement.CreateTenant"
+						}
+					},
+					"id": "CreateTenantFunction01"
+				},
+				"ActivateTenantFunction01": {
+					"type": "resource.compute.function",
+					"name": "ActivateTenantFunction",
+					"memory": 512,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/tenant-management.activate_tenant",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"PROVISION_TENANT": "/provisioning/",
+							"ENABLE_USERS_BY_TENANT": "/users/enable",
+							"POWERTOOLS_SERVICE_NAME": "TenantManagement.ActivateTenant"
+						}
+					},
+					"id": "ActivateTenantFunction01"
+				},
+				"GetTenantFunction01": {
+					"type": "resource.compute.function",
+					"name": "GetTenantFunction",
+					"memory": 512,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/tenant-management.get_tenant",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"POWERTOOLS_SERVICE_NAME": "TenantManagement.GetTenant"
+						}
+					},
+					"id": "GetTenantFunction01"
+				},
+				"DeactivateTenantFunction01": {
+					"type": "resource.compute.function",
+					"name": "DeactivateTenantFunction",
+					"memory": 512,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/tenant-management.deactivate_tenant",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"DISABLE_USERS_BY_TENANT": "/users/disable",
+							"DEPROVISION_TENANT": "/provisioning/",
+							"POWERTOOLS_SERVICE_NAME": "TenantManagement.DeactivateTenant"
+						}
+					},
+					"id": "DeactivateTenantFunction01"
+				},
+				"UpdateTenantFunction01": {
+					"type": "resource.compute.function",
+					"name": "UpdateTenantFunction",
+					"memory": 512,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/tenant-management.update_tenant",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {
+							"BASIC_TIER_API_KEY": "",
+							"STANDARD_TIER_API_KEY": "",
+							"PREMIUM_TIER_API_KEY": "",
+							"PLATINUM_TIER_API_KEY": "",
+							"POWERTOOLS_SERVICE_NAME": "TenantManagement.UpdateTenant"
+						}
+					},
+					"id": "UpdateTenantFunction01"
+				},
+				"GetTenantsFunction01": {
+					"type": "resource.compute.function",
+					"name": "GetTenantsFunction",
+					"memory": 512,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/tenant-management.get_tenants",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {}
+					},
+					"id": "GetTenantsFunction01"
+				},
+				"GetTenantConfigFunction01": {
+					"type": "resource.compute.function",
+					"name": "GetTenantConfigFunction",
+					"memory": 512,
+					"timeout": 29,
+					"entryPoint": "src/TenantManagementService/tenant-management.load_tenant_config",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"policies": [
+						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
+						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+					],
+					"environment": {
+						"variables": {}
+					},
+					"id": "GetTenantConfigFunction01"
 				}
 			},
 			"connections": {
@@ -621,13 +800,111 @@
 						"from": "GetUsersFunction",
 						"to": "TenantUserMappingTable"
 					}
+				},
+				"CreateTenantFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-write",
+						"from": "CreateTenantFunction01",
+						"to": "TenantDetailsTable"
+					},
+					"ServerlessSaaSSettingsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "CreateTenantFunction01",
+						"to": "ServerlessSaaSSettingsTable"
+					}
+				},
+				"ActivateTenantFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-write",
+						"from": "ActivateTenantFunction01",
+						"to": "TenantDetailsTable"
+					},
+					"ServerlessSaaSSettingsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "ActivateTenantFunction01",
+						"to": "ServerlessSaaSSettingsTable"
+					}
+				},
+				"GetTenantFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-write",
+						"from": "GetTenantFunction01",
+						"to": "TenantDetailsTable"
+					},
+					"ServerlessSaaSSettingsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "GetTenantFunction01",
+						"to": "ServerlessSaaSSettingsTable"
+					}
+				},
+				"DeactivateTenantFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-write",
+						"from": "DeactivateTenantFunction01",
+						"to": "TenantDetailsTable"
+					},
+					"ServerlessSaaSSettingsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "DeactivateTenantFunction01",
+						"to": "ServerlessSaaSSettingsTable"
+					}
+				},
+				"UpdateTenantFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-write",
+						"from": "UpdateTenantFunction01",
+						"to": "TenantDetailsTable"
+					},
+					"ServerlessSaaSSettingsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "UpdateTenantFunction01",
+						"to": "ServerlessSaaSSettingsTable"
+					}
+				},
+				"GetTenantsFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-write",
+						"from": "GetTenantsFunction01",
+						"to": "TenantDetailsTable"
+					},
+					"ServerlessSaaSSettingsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "GetTenantsFunction01",
+						"to": "ServerlessSaaSSettingsTable"
+					}
+				},
+				"GetTenantConfigFunction01": {
+					"TenantDetailsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-write",
+						"from": "GetTenantConfigFunction01",
+						"to": "TenantDetailsTable"
+					},
+					"ServerlessSaaSSettingsTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "read-only",
+						"from": "GetTenantConfigFunction01",
+						"to": "ServerlessSaaSSettingsTable"
+					}
 				}
 			},
 			"metadata": {
 				"designer": {
 					"resourcePositions": {
 						"ServerlessSaaSSettingsTable": {
-							"x": 407.5,
+							"x": 407.5000305175781,
 							"y": 31.399993896484375,
 							"z": 0
 						},
@@ -637,7 +914,7 @@
 							"z": 0
 						},
 						"TenantDetailsTable": {
-							"x": 990.9306640625,
+							"x": 989.5973205566406,
 							"y": 27.44903564453125,
 							"z": 0
 						},
@@ -710,6 +987,41 @@
 							"x": 596.9000244140625,
 							"y": 404.02001953125,
 							"z": 0
+						},
+						"CreateTenantFunction01": {
+							"x": 346.8333435058594,
+							"y": 101.79999542236328,
+							"z": 0
+						},
+						"ActivateTenantFunction01": {
+							"x": 343.5066223144531,
+							"y": 155.3466567993164,
+							"z": 0
+						},
+						"GetTenantFunction01": {
+							"x": 344.8399658203125,
+							"y": 207.34667205810547,
+							"z": 0
+						},
+						"DeactivateTenantFunction01": {
+							"x": 339.50665283203125,
+							"y": 256.67999267578125,
+							"z": 0
+						},
+						"UpdateTenantFunction01": {
+							"x": 335.50665283203125,
+							"y": 307.3466567993164,
+							"z": 0
+						},
+						"GetTenantsFunction01": {
+							"x": 336.8399658203125,
+							"y": 355.3466796875,
+							"z": 0
+						},
+						"GetTenantConfigFunction01": {
+							"x": 334.17333984375,
+							"y": 407.34666442871094,
+							"z": 0
 						}
 					}
 				}
@@ -748,6 +1060,26 @@
 				"TENANT_APP_CLIENT_ID": {
 					"paths": [
 						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_APP_CLIENT_ID"
+					]
+				},
+				"ApiKeyBasicTierParameter": {
+					"paths": [
+						"resources/UpdateTenantFunction01/environment/variables/BASIC_TIER_API_KEY"
+					]
+				},
+				"ApiKeyStandardTierParameter": {
+					"paths": [
+						"resources/UpdateTenantFunction01/environment/variables/STANDARD_TIER_API_KEY"
+					]
+				},
+				"ApiKeyPremiumTierParameter": {
+					"paths": [
+						"resources/UpdateTenantFunction01/environment/variables/PREMIUM_TIER_API_KEY"
+					]
+				},
+				"ApiKeyPlatinumTierParameter": {
+					"paths": [
+						"resources/UpdateTenantFunction01/environment/variables/PLATINUM_TIER_API_KEY"
 					]
 				}
 			},
