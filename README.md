@@ -12,6 +12,7 @@ authenticate the request, and give lambdas fine-grained access
 - No APIs policies, and blocking access on a IAM basis
 - No throttling support (no support for API-KEYs or usage plans)
 - Authorizer must be lambda authorizer (rather than token)
+- No way to pass parameters to custom resources
 
 ## Installation
 
