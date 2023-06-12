@@ -1012,41 +1012,6 @@
 						"id": "AdminApiGatewayApi"
 					},
 					"id": "ApiEndpoint18"
-				},
-				"CustomResources01": {
-					"type": "resource.cloud-formation.custom-resources",
-					"name": "CustomResources",
-					"resources": {
-						"UpdateSettingsTable": {
-							"Type": "Custom::UpdateSettingsTable",
-							"Properties": {
-								"ServiceToken": {
-									"Fn::GetAtt": [
-										"UpdateSettingsTableFunction01",
-										"Arn"
-									]
-								},
-								"SettingsTableName": {
-									"Ref": "ServerlessSaaSSettingsTable"
-								}
-							}
-						},
-						"UpdateTenantStackMap": {
-							"Type": "Custom::UpdateTenantStackMap",
-							"Properties": {
-								"ServiceToken": {
-									"Fn::GetAtt": [
-										"UpdateTenantStackMapTableFunction01",
-										"Arn"
-									]
-								},
-								"TenantStackMappingTableName": {
-									"Ref": "TenantStackMappingTable"
-								}
-							}
-						}
-					},
-					"id": "CustomResources01"
 				}
 			},
 			"connections": {
@@ -1725,16 +1690,11 @@
 							"x": 220,
 							"y": 155.54698944091797,
 							"z": 0
-						},
-						"CustomResources01": {
-							"x": 14.615386962890625,
-							"y": -106.41537535190582,
-							"z": 0
 						}
 					}
 				}
 			},
-			"unsafe": true,
+			"unsafe": false,
 			"parameters": {
 				"POOL_ID": {
 					"paths": [
