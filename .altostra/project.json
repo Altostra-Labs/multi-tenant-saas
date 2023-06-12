@@ -170,33 +170,6 @@
 					},
 					"id": "SharedServicesAuthorizerFunction01"
 				},
-				"BusinessServicesAuthorizerFunction01": {
-					"type": "resource.compute.function",
-					"name": "BusinessServicesAuthorizerFunction",
-					"memory": 256,
-					"timeout": 29,
-					"entryPoint": "src/Resources/tenant_authorizer.lambda_handler",
-					"runtime": "python3.9",
-					"endpointUrl": {
-						"enabled": false,
-						"authenticated": false
-					},
-					"packageType": "zip",
-					"layers": [],
-					"policies": [
-						"arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy",
-						"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
-					],
-					"environment": {
-						"variables": {
-							"OPERATION_USERS_API_KEY": "",
-							"OPERATION_USERS_APP_CLIENT": "",
-							"OPERATION_USERS_USER_POOL": ""
-						}
-					},
-					"id": "BusinessServicesAuthorizerFunction01"
-				},
 				"AuthorizerPolicy01": {
 					"type": "resource.access.policy",
 					"name": "AuthorizerPolicy",
@@ -1088,20 +1061,7 @@
 						"to": "TenantDetailsTable"
 					}
 				},
-				"BusinessServicesAuthorizerFunction01": {
-					"TenantDetailsTable": {
-						"type": "connection.resource-access",
-						"accessLevel": "read-only",
-						"from": "BusinessServicesAuthorizerFunction01",
-						"to": "TenantDetailsTable"
-					}
-				},
 				"AuthorizerPolicy01": {
-					"BusinessServicesAuthorizerFunction01": {
-						"type": "connection.access.policy-attachment",
-						"from": "AuthorizerPolicy01",
-						"to": "BusinessServicesAuthorizerFunction01"
-					},
 					"SharedServicesAuthorizerFunction01": {
 						"type": "connection.access.policy-attachment",
 						"from": "AuthorizerPolicy01",
@@ -1649,11 +1609,6 @@
 							"y": 97.45868682861328,
 							"z": 0
 						},
-						"BusinessServicesAuthorizerFunction01": {
-							"x": -390,
-							"y": 30,
-							"z": 0
-						},
 						"AuthorizerPolicy01": {
 							"x": 422.45457458496094,
 							"y": -218.18181991577148,
@@ -1792,20 +1747,17 @@
 				},
 				"ApiKeyOperationUsersParameter": {
 					"paths": [
-						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_API_KEY",
-						"resources/BusinessServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_API_KEY"
+						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_API_KEY"
 					]
 				},
 				"CognitoOperationUsersUserPoolClientId": {
 					"paths": [
-						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_APP_CLIENT",
-						"resources/BusinessServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_APP_CLIENT"
+						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_APP_CLIENT"
 					]
 				},
 				"CognitoOperationUsersUserPoolId": {
 					"paths": [
-						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_USER_POOL",
-						"resources/BusinessServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_USER_POOL"
+						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_USER_POOL"
 					]
 				},
 				"TENANT_USER_POOL_CALLBACK_URL": {
