@@ -4,6 +4,7 @@
 import json
 import boto3
 import logger
+import os
 
 from crhelper import CfnResource
 helper = CfnResource()
@@ -28,8 +29,8 @@ def do_action(event, _):
     logger.info("Updating settings")
 
     settings_table_name = event['ResourceProperties']['SettingsTableName']
-    cognitoUserPoolId = event['ResourceProperties']['cognitoUserPoolId']
-    cognitoUserPoolClientId = event['ResourceProperties']['cognitoUserPoolClientId']
+    cognitoUserPoolId = os.environ['cognitoUserPoolId']
+    cognitoUserPoolClientId = os.environ['cognitoUserPoolClientId']
 
     table_system_settings = dynamodb.Table(settings_table_name)
 

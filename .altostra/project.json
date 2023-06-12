@@ -702,7 +702,10 @@
 						"arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
 					],
 					"environment": {
-						"variables": {}
+						"variables": {
+							"cognitoUserPoolClientId": "",
+							"cognitoUserPoolId": ""
+						}
 					},
 					"id": "UpdateSettingsTableFunction01"
 				},
@@ -1025,12 +1028,6 @@
 								},
 								"SettingsTableName": {
 									"Ref": "ServerlessSaaSSettingsTable"
-								},
-								"cognitoUserPoolId": {
-									"Ref": "CognitoUserPoolId"
-								},
-								"cognitoUserPoolClientId": {
-									"Ref": "CognitoUserPoolClientId"
 								}
 							}
 						},
@@ -1742,7 +1739,8 @@
 				"POOL_ID": {
 					"paths": [
 						"resources/MyImportedPool01/identifier",
-						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_USER_POOL_ID"
+						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_USER_POOL_ID",
+						"resources/UpdateSettingsTableFunction01/environment/variables/cognitoUserPoolId"
 					]
 				},
 				"ApiKeyOperationUsersParameter": {
@@ -1767,7 +1765,8 @@
 				},
 				"TENANT_APP_CLIENT_ID": {
 					"paths": [
-						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_APP_CLIENT_ID"
+						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_APP_CLIENT_ID",
+						"resources/UpdateSettingsTableFunction01/environment/variables/cognitoUserPoolClientId"
 					]
 				},
 				"ApiKeyBasicTierParameter": {
