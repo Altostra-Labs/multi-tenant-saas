@@ -1,10 +1,11 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
+import os
+print(os.getcwd())
 
 import json
 import boto3
 import logger
-import os
 
 from crhelper import CfnResource
 helper = CfnResource()

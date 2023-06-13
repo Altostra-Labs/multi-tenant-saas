@@ -1795,7 +1795,7 @@
 				}
 			},
 			"globalEnvironmentVariables": {
-				"PYTHONPATH": "/var/task",
+				"PYTHONPATH": "/var/task/src",
 				"POWERTOOLS_METRICS_NAMESPACE": "ServerlessSaaS",
 				"LOG_LEVEL": "DEBUG"
 			}
