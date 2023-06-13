@@ -1,0 +1,14 @@
+#! /usr/bin/env bash
+
+function install-dir () {
+  local dir="${1:?Missing directory}"
+
+  echo pip install -r "$dir/requirements.txt" -t ./src/vendor --upgrade
+  pip install -r "$dir/requirements.txt" -t ./src/vendor --upgrade
+}
+
+
+install-dir ./src
+install-dir ./src/custom_resources
+install-dir ./src/TenantManagementService
+install-dir ./src/Resources
