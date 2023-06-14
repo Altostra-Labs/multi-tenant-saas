@@ -23,9 +23,8 @@ app_client_operation_user = os.environ['OPERATION_USERS_APP_CLIENT']
 api_key_operation_user = os.environ['OPERATION_USERS_API_KEY']
 
 def lambda_handler(event, context):
-    print(event['headers'])
     #get JWT token after Bearer from authorization
-    token = event['headers']['authorization'].split(" ")
+    token = event['headers']['Authorization'].split(" ")
     if (token[0] != 'Bearer'):
         raise Exception('Authorization header should have a format Bearer <JWT> Token')
     jwt_bearer_token = token[1]
@@ -105,20 +104,8 @@ def lambda_handler(event, context):
     iam_policy = auth_manager.getPolicyForUser(user_role, utils.Service_Identifier.SHARED_SERVICES.value, tenant_id, region, aws_account_id)
     logger.info(iam_policy)
     
-    role_arn = "arn:aws:iam::{}:role/authorizer-access-role".format(aws_account_id)
-    
-    assumed_role = sts_client.assume_role(
-        RoleArn=role_arn,
-        RoleSessionName="tenant-aware-session",
-        Policy=iam_policy,
-    )
-    credentials = assumed_role["Credentials"]
-
     #pass sts credentials to lambda
     context = {
-        'accesskey': credentials['AccessKeyId'], # $context.authorizer.key -> value
-        'secretkey' : credentials['SecretAccessKey'],
-        'sessiontoken' : credentials["SessionToken"],
         'userName': user_name,
         'tenantId': tenant_id,
         'userPoolId': userpool_id,
