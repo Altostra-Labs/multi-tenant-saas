@@ -68,7 +68,24 @@ def get_tenants(event, context):
     table_tenant_details = __getTenantManagementTable(event)
 
     try:
-        response = table_tenant_details.scan()
+        authData = event['requestContext']['authorizer']
+        response = None
+
+        if authData['userRole'] == 'SystemAdmin':
+            response = table_tenant_details.scan()
+        else:
+            table_tenant_details.query(
+                KeyConditionExpression= '#tenant = :tenant',
+                ExpressionAttributeNames= {
+                    '#tenant': 'tenantId',
+                },
+                ExpressionAttributeValues= {
+                    ':tenant': {
+                        'S': authData['tenantId']
+                    }
+                }
+            )
+            
     except Exception as e:
         raise Exception('Error getting all tenants', e)
     else:
@@ -362,11 +379,10 @@ def __getApiKey(tenant_tier):
         return os.environ['BASIC_TIER_API_KEY']
 
 def __getTenantManagementTable(event):
-    accesskey = event['requestContext']['authorizer']['accesskey']
-    secretkey = event['requestContext']['authorizer']['secretkey']
-    sessiontoken = event['requestContext']['authorizer']['sessiontoken']    
-    dynamodb = boto3.resource('dynamodb', aws_access_key_id=accesskey, aws_secret_access_key=secretkey, aws_session_token=sessiontoken)
-    table_tenant_details = dynamodb.Table('ServerlessSaaS-TenantDetails')#TODO: read table names from env vars
+    dynamodb = boto3.resource('dynamodb')
+    #TODO: read table names from env vars
+    #TOODEELOO: Altostra provides
+    table_tenant_details = dynamodb.Table(os.environ['TABLE_TENANTDETAILSTABLE'])
     
     return table_tenant_details
 
