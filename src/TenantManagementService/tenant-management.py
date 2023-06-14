@@ -22,24 +22,32 @@ region = os.environ['AWS_REGION']
 
 #This method has been locked down to be only
 def create_tenant(event, context):
-    
+    auth = AuthorizedUser(event)
+
+    if not auth.isSysAdmin():
+        return utils.create_unauthorized_response()
+
     api_gateway_url = ''       
     tenant_details = json.loads(event['body'])
 
     dynamodb = boto3.resource('dynamodb')
-    table_tenant_details = dynamodb.Table('ServerlessSaaS-TenantDetails')#TODO: read table names from env vars
-    table_system_settings = dynamodb.Table('ServerlessSaaS-Settings')
+    #TODO: read table names from env vars
+    #TOODEELOO Altostra provides
+    table_tenant_details = dynamodb.Table(os.environ['TABLE_TENANTDETAILSTABLE'])
+    table_system_settings = dynamodb.Table(os.environ['TABLE_SERVERLESSSAASSETTINGSTABLE'])
 
     try:          
         # for pooled tenants the apigateway url is saving in settings during stack creation
         # update from there during tenant creation
-        if(tenant_details['dedicatedTenancy'].lower()!= 'true'):
-            settings_response = table_system_settings.get_item(
-                Key={
-                    'settingName': 'apiGatewayUrl-Pooled'
-                } 
-            )
-            api_gateway_url = settings_response['Item']['settingValue']
+        if(tenant_details['dedicatedTenancy'].lower() == 'true'):
+            return utils.create_unauthorized_response()
+
+        settings_response = table_system_settings.get_item(
+            Key={
+                'settingName': 'apiGatewayUrl-Pooled'
+            } 
+        )
+        api_gateway_url = settings_response['Item']['settingValue']
 
         response = table_tenant_details.put_item(
             Item={
@@ -68,10 +76,10 @@ def get_tenants(event, context):
     table_tenant_details = __getTenantManagementTable(event)
 
     try:
-        authData = event['requestContext']['authorizer']
+        authData = AuthorizedUser(event)
         response = None
 
-        if authData['userRole'] == 'SystemAdmin':
+        if authData.isSysAdmin():
             response = table_tenant_details.scan()
         else:
             table_tenant_details.query(
@@ -81,16 +89,28 @@ def get_tenants(event, context):
                 },
                 ExpressionAttributeValues= {
                     ':tenant': {
-                        'S': authData['tenantId']
+                        'S': authData.tenantId
                     }
                 }
             )
-            
+
     except Exception as e:
         raise Exception('Error getting all tenants', e)
     else:
         return utils.generate_response(response['Items'])    
 
+class AuthorizedUser:
+    def __init__(self, event) -> None:
+        authData = event['requestContext']['authorizer']
+
+        self.userName = authData['user_name']
+        self.tenantId = authData['tenant_id']
+        self.userPoolId = authData['userpool_id']
+        self.apiKey = authData['api_key'],
+        self.userRole = authData['user_role']
+
+    def isSysAdmin(self) -> bool:
+        return self.userRole == 'SystemAdmin'
 
 @tracer.capture_lambda_handler
 def update_tenant(event, context):
