@@ -736,8 +736,7 @@
 					"type": "resource.api",
 					"name": "AdminApiGatewayApi",
 					"cors": {
-						"type": "api.cors.simple",
-						"origins": "*"
+						"type": "api.cors.none"
 					},
 					"endpoints": [
 						{
@@ -811,6 +810,10 @@
 						{
 							"type": "ref",
 							"id": "ApiEndpoint18"
+						},
+						{
+							"type": "ref",
+							"id": "ApiEndpoint19"
 						}
 					],
 					"id": "AdminApiGatewayApi"
@@ -1047,6 +1050,36 @@
 						}
 					},
 					"id": "CustomResources01"
+				},
+				"ApiEndpoint19": {
+					"type": "resource.api.endpoint",
+					"name": "api-endpoint",
+					"method": "OPTIONS",
+					"path": "/{proxy+}",
+					"api": {
+						"type": "ref",
+						"id": "AdminApiGatewayApi"
+					},
+					"authorizer": null,
+					"id": "ApiEndpoint19"
+				},
+				"CorsoptionsHandler01": {
+					"type": "resource.compute.function",
+					"name": "CORSOptionsHandler",
+					"memory": 256,
+					"timeout": 6,
+					"entryPoint": "src/cors_options_handler.handler",
+					"runtime": "python3.9",
+					"endpointUrl": {
+						"enabled": false,
+						"authenticated": false
+					},
+					"packageType": "zip",
+					"layers": [],
+					"environment": {
+						"variables": {}
+					},
+					"id": "CorsoptionsHandler01"
 				}
 			},
 			"connections": {
@@ -1571,6 +1604,13 @@
 							"cacheTimeout": 60
 						}
 					}
+				},
+				"ApiEndpoint19": {
+					"CorsoptionsHandler01": {
+						"type": "connection.trigger",
+						"from": "ApiEndpoint19",
+						"to": "CorsoptionsHandler01"
+					}
 				}
 			},
 			"metadata": {
@@ -1582,8 +1622,8 @@
 							"z": 0
 						},
 						"TenantStackMappingTable": {
-							"x": 220,
-							"y": 726.210693359375,
+							"x": 221.36984252929688,
+							"y": 744.0189056396484,
 							"z": 0
 						},
 						"TenantDetailsTable": {
@@ -1592,8 +1632,8 @@
 							"z": 0
 						},
 						"TenantUserMappingTable": {
-							"x": 220,
-							"y": 666.3805236816406,
+							"x": 222.73971557617188,
+							"y": 695.1476211547852,
 							"z": 0
 						},
 						"MyImportedPool01": {
@@ -1692,8 +1732,8 @@
 							"z": 0
 						},
 						"AssumeRole01": {
-							"x": 50,
-							"y": -450,
+							"x": 20,
+							"y": -220,
 							"z": 0
 						},
 						"RegisterTenantFunction01": {
@@ -1729,6 +1769,11 @@
 						"CustomResources01": {
 							"x": 14.615386962890625,
 							"y": -106.41537535190582,
+							"z": 0
+						},
+						"CorsoptionsHandler01": {
+							"x": 760,
+							"y": 590,
 							"z": 0
 						}
 					}
