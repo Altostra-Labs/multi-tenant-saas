@@ -66,7 +66,7 @@ def register_tenant(event, context):
 
         
     except Exception as e:
-        logger.error('Error registering a new tenant')
+        logger.error('Error registering a new tenant', e)
         raise Exception('Error registering a new tenant', e)
     else:
         return utils.create_success_response("You have been registered in our system")
