@@ -1,11 +1,12 @@
 import logger
-from UserManagement import UserManagement
+from user_management import UserManagement
 
 def create_tenant_admin_user(
   tenant_details,
   tenant_user_pool_id,
   tenant_app_client_id,
-  table_tenant_user_map
+  table_tenant_user_map,
+  application_site_url
 ):
   tenant_id = tenant_details['tenantId']
   logger.info(tenant_details)
@@ -13,7 +14,7 @@ def create_tenant_admin_user(
   user_mgmt = UserManagement()
 
   if (tenant_details['dedicatedTenancy'] == 'true'):
-      user_pool_response = user_mgmt.create_user_pool(tenant_id)
+      user_pool_response = user_mgmt.create_user_pool(tenant_id, application_site_url)
       user_pool_id = user_pool_response['UserPool']['Id']
       logger.info (user_pool_id)
       

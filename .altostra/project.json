@@ -625,6 +625,7 @@
 					],
 					"environment": {
 						"variables": {
+							"TENANT_USER_POOL_CALLBACK_URL": "",
 							"TENANT_APP_CLIENT_ID": "",
 							"TENANT_USER_POOL_ID": "",
 							"POWERTOOLS_SERVICE_NAME": "TenantRegistration.RegisterTenant",
@@ -1831,7 +1832,8 @@
 				},
 				"TENANT_USER_POOL_CALLBACK_URL": {
 					"paths": [
-						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_USER_POOL_CALLBACK_URL"
+						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_USER_POOL_CALLBACK_URL",
+						"resources/RegisterTenantFunction01/environment/variables/TENANT_USER_POOL_CALLBACK_URL"
 					]
 				},
 				"TENANT_APP_CLIENT_ID": {

@@ -10,8 +10,7 @@ import metrics_manager
 import auth_manager
 from boto3.dynamodb.conditions import Key
 from aws_lambda_powertools import Tracer
-from user_management.UserManagement import UserManagement
-from user_management.create_tenant_admin_user import create_tenant_admin_user as create_tenant_admin
+from user_management import UserManagement, create_tenant_admin_user as tenant_admin_creation
 tracer = Tracer()
 
 client = boto3.client('cognito-idp')
@@ -26,11 +25,12 @@ def create_tenant_admin_user(event, context):
     
     tenant_details = json.loads(event['body'])
 
-    response = create_tenant_admin(
+    response = tenant_admin_creation.create_tenant_admin_user(
         tenant_details,
         tenant_app_client_id,
         tenant_user_pool_id,
-        table_tenant_user_map
+        table_tenant_user_map,
+        application_site_url= os.environ['TENANT_USER_POOL_CALLBACK_URL']
     )
 
     return utils.create_success_response(response)

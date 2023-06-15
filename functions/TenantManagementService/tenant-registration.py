@@ -14,9 +14,6 @@ import re
 from user_management.create_tenant_admin_user import create_tenant_admin_user
 
 region = os.environ['AWS_REGION']
-create_tenant_admin_user_resource_path = os.environ['CREATE_TENANT_ADMIN_USER_RESOURCE_PATH']
-create_tenant_resource_path = os.environ['CREATE_TENANT_RESOURCE_PATH']
-provision_tenant_resource_path = os.environ['PROVISION_TENANT_RESOURCE_PATH']
 
 platinum_tier_api_key = os.environ['PLATINUM_TIER_API_KEY']
 premium_tier_api_key = os.environ['PREMIUM_TIER_API_KEY']
@@ -63,7 +60,7 @@ def register_tenant(event, context):
         __create_tenant(tenant_details)
 
         if (tenant_details['dedicatedTenancy'].upper() == 'TRUE'):
-            provision_tenant_response = __provision_tenant(tenant_details, headers, auth, host, stage_name)
+            provision_tenant_response = __provision_tenant(tenant_details)
             logger.info(provision_tenant_response)
 
     
@@ -76,7 +73,7 @@ def register_tenant(event, context):
     else:
         return utils.create_success_response("You have been registered in our system")
 
-def __create_tenant_admin_user(tenant_details, headers, auth, host, stage_name):
+def __create_tenant_admin_user(tenant_details):
     tenant_user_pool_id = os.environ['TENANT_USER_POOL_ID']
     tenant_app_client_id = os.environ['TENANT_APP_CLIENT_ID']
     table_tenant_user_map = dynamodb.Table(os.environ['TABLE_TENANTUSERMAPPINGTABLE'])
@@ -86,7 +83,8 @@ def __create_tenant_admin_user(tenant_details, headers, auth, host, stage_name):
             tenant_details,
             tenant_user_pool_id,
             tenant_app_client_id,
-            table_tenant_user_map
+            table_tenant_user_map,
+            application_site_url= os.environ['TENANT_USER_POOL_CALLBACK_URL']
         )
     except Exception as e:
         err = Exception('Error occurred while calling the create tenant admin user service', e)
