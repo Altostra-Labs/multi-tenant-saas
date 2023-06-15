@@ -102,12 +102,13 @@ def get_tenants(event, context):
 class AuthorizedUser:
     def __init__(self, event) -> None:
         authData = event['requestContext']['authorizer']
+        logger.info(authData)
 
-        self.userName = authData['user_name']
-        self.tenantId = authData['tenant_id']
-        self.userPoolId = authData['userpool_id']
-        self.apiKey = authData['api_key'],
-        self.userRole = authData['user_role']
+        self.userName = authData.get('userName')
+        self.tenantId = authData.get('tenantId')
+        self.userPoolId = authData.get('userPoolId')
+        self.apiKey = authData.get('apiKey')
+        self.userRole = authData.get('userRole')
 
     def isSysAdmin(self) -> bool:
         return self.userRole == 'SystemAdmin'

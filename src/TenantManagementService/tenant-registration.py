@@ -66,8 +66,9 @@ def register_tenant(event, context):
 
         
     except Exception as e:
-        logger.error('Error registering a new tenant', e)
-        raise Exception('Error registering a new tenant', e)
+        err = Exception('Error registering a new tenant', e)
+        logger.error(err)
+        raise err
     else:
         return utils.create_success_response("You have been registered in our system")
 
@@ -78,8 +79,9 @@ def __create_tenant_admin_user(tenant_details, headers, auth, host, stage_name):
         response = requests.post(url, data=json.dumps(tenant_details), auth=auth, headers=headers) 
         response_json = response.json()
     except Exception as e:
-        logger.error('Error occured while calling the create tenant admin user service')
-        raise Exception('Error occured while calling the create tenant admin user service', e)
+        err = Exception('Error occurred while calling the create tenant admin user service', e)
+        logger.error(err)
+        raise err
     else:
         return response_json
 
