@@ -9,6 +9,7 @@ import uuid
 import logger
 import requests
 import re
+from user_management.create_tenant_admin_user import create_tenant_admin_user
 
 region = os.environ['AWS_REGION']
 create_tenant_admin_user_resource_path = os.environ['CREATE_TENANT_ADMIN_USER_RESOURCE_PATH']
@@ -21,7 +22,7 @@ standard_tier_api_key = os.environ['STANDARD_TIER_API_KEY']
 basic_tier_api_key = os.environ['BASIC_TIER_API_KEY']
 
 lambda_client = boto3.client('lambda')
-
+dynamodb = boto3.resource('dynamodb')
 
 def register_tenant(event, context):
     logger.info(event)
@@ -73,17 +74,23 @@ def register_tenant(event, context):
         return utils.create_success_response("You have been registered in our system")
 
 def __create_tenant_admin_user(tenant_details, headers, auth, host, stage_name):
+    tenant_user_pool_id = os.environ['TENANT_USER_POOL_ID']
+    tenant_app_client_id = os.environ['TENANT_APP_CLIENT_ID']
+    table_tenant_user_map = dynamodb.Table(os.environ['TABLE_TENANTUSERMAPPINGTABLE'])
+
     try:
-        url = ''.join(['https://', host, '/', stage_name, create_tenant_admin_user_resource_path])
-        logger.info(url)
-        response = requests.post(url, data=json.dumps(tenant_details), auth=auth, headers=headers) 
-        response_json = response.json()
+        result = create_tenant_admin_user(
+            tenant_details,
+            tenant_user_pool_id,
+            tenant_app_client_id,
+            table_tenant_user_map
+        )
     except Exception as e:
         err = Exception('Error occurred while calling the create tenant admin user service', e)
         logger.error(err)
         raise err
     else:
-        return response_json
+        return result
 
 def __create_tenant(tenant_details, headers, auth, host, stage_name):
     try:

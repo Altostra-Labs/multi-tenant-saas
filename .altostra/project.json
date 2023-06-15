@@ -625,6 +625,8 @@
 					],
 					"environment": {
 						"variables": {
+							"TENANT_APP_CLIENT_ID": "",
+							"TENANT_USER_POOL_ID": "",
 							"POWERTOOLS_SERVICE_NAME": "TenantRegistration.RegisterTenant",
 							"BASIC_TIER_API_KEY": "",
 							"STANDARD_TIER_API_KEY": "",
@@ -1611,6 +1613,14 @@
 						"from": "ApiEndpoint19",
 						"to": "CorsoptionsHandler01"
 					}
+				},
+				"RegisterTenantFunction01": {
+					"TenantUserMappingTable": {
+						"type": "connection.resource-access",
+						"accessLevel": "write-only",
+						"from": "RegisterTenantFunction01",
+						"to": "TenantUserMappingTable"
+					}
 				}
 			},
 			"metadata": {
@@ -1785,7 +1795,8 @@
 					"paths": [
 						"resources/MyImportedPool01/identifier",
 						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_USER_POOL_ID",
-						"resources/UpdateSettingsTableFunction01/environment/variables/cognitoUserPoolId"
+						"resources/UpdateSettingsTableFunction01/environment/variables/cognitoUserPoolId",
+						"resources/RegisterTenantFunction01/environment/variables/TENANT_USER_POOL_ID"
 					]
 				},
 				"ApiKeyOperationUsersParameter": {
@@ -1811,7 +1822,8 @@
 				"TENANT_APP_CLIENT_ID": {
 					"paths": [
 						"resources/CreateTenantAdminUserFunction01/environment/variables/TENANT_APP_CLIENT_ID",
-						"resources/UpdateSettingsTableFunction01/environment/variables/cognitoUserPoolClientId"
+						"resources/UpdateSettingsTableFunction01/environment/variables/cognitoUserPoolClientId",
+						"resources/RegisterTenantFunction01/environment/variables/TENANT_APP_CLIENT_ID"
 					]
 				},
 				"ApiKeyBasicTierParameter": {

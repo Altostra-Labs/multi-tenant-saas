@@ -4,13 +4,14 @@
 import json
 import boto3
 import os
-import sys
 import logger 
 import utils
 import metrics_manager
 import auth_manager
 from boto3.dynamodb.conditions import Key
 from aws_lambda_powertools import Tracer
+from user_management.UserManagement import UserManagement
+from user_management.create_tenant_admin_user import create_tenant_admin_user as create_tenant_admin
 tracer = Tracer()
 
 client = boto3.client('cognito-idp')
@@ -19,42 +20,19 @@ table_tenant_user_map = dynamodb.Table('ServerlessSaaS-TenantUserMapping')
 table_tenant_details = dynamodb.Table('ServerlessSaaS-TenantDetails')
 
 def create_tenant_admin_user(event, context):
+    table_tenant_user_map = dynamodb.Table(os.environ['TABLE_TENANTUSERMAPPINGTABLE'])
     tenant_user_pool_id = os.environ['TENANT_USER_POOL_ID']
     tenant_app_client_id = os.environ['TENANT_APP_CLIENT_ID']
     
     tenant_details = json.loads(event['body'])
-    tenant_id = tenant_details['tenantId']
-    logger.info(tenant_details)
 
-    user_mgmt = UserManagement()
+    response = create_tenant_admin(
+        tenant_details,
+        tenant_app_client_id,
+        tenant_user_pool_id,
+        table_tenant_user_map
+    )
 
-    if (tenant_details['dedicatedTenancy'] == 'true'):
-        user_pool_response = user_mgmt.create_user_pool(tenant_id)
-        user_pool_id = user_pool_response['UserPool']['Id']
-        logger.info (user_pool_id)
-        
-        app_client_response = user_mgmt.create_user_pool_client(user_pool_id)
-        logger.info(app_client_response)
-        app_client_id = app_client_response['UserPoolClient']['ClientId']
-        user_pool_domain_response = user_mgmt.create_user_pool_domain(user_pool_id, tenant_id)
-        
-        logger.info ("New Tenant Created")
-    else:
-        user_pool_id = tenant_user_pool_id
-        app_client_id = tenant_app_client_id
-
-    #Add tenant admin now based upon user pool
-    tenant_user_group_response = user_mgmt.create_user_group(user_pool_id,tenant_id,"User group for tenant {0}".format(tenant_id))
-
-    tenant_admin_user_name = 'tenant-admin-{0}'.format(tenant_details['tenantId'])
-
-    create_tenant_admin_response = user_mgmt.create_tenant_admin(user_pool_id, tenant_admin_user_name, tenant_details)
-    
-    add_tenant_admin_to_group_response = user_mgmt.add_user_to_group(user_pool_id, tenant_admin_user_name, tenant_user_group_response['Group']['GroupName'])
-    
-    tenant_user_mapping_response = user_mgmt.create_user_tenant_mapping(tenant_admin_user_name,tenant_id)
-    
-    response = {"userPoolId": user_pool_id, "appClientId": app_client_id, "tenantAdminUserName": tenant_admin_user_name}
     return utils.create_success_response(response)
 
 @tracer.capture_lambda_handler
@@ -112,7 +90,11 @@ def create_user(event, context):
         logger.log_with_tenant_context(event, response)
         user_mgmt = UserManagement()
         user_mgmt.add_user_to_group(user_pool_id, user_details['userName'], user_tenant_id)
-        response_mapping = user_mgmt.create_user_tenant_mapping(user_details['userName'], user_tenant_id)
+        response_mapping = user_mgmt.create_user_tenant_mapping(
+            user_details['userName'], 
+            user_tenant_id, 
+            table_tenant_user_map
+        )
 
         logger.log_with_tenant_context(event, "Request completed to create new user ")
         return utils.create_success_response("New user created")
@@ -382,140 +364,140 @@ def get_user_info(event, user_pool_id, user_name):
     logger.log_with_tenant_context(event, user_info)
     return user_info    
 
-class UserManagement:
-    def create_user_pool(self, tenant_id):
-        application_site_url = os.environ['TENANT_USER_POOL_CALLBACK_URL']
-        email_message = ''.join(["Login into tenant UI application at ", 
-                        application_site_url,
-                        " with username {username} and temporary password {####}"])
-        email_subject = "Your temporary password for tenant UI application"  
-        response = client.create_user_pool(
-            PoolName= tenant_id + '-ServerlessSaaSUserPool',
-            AutoVerifiedAttributes=['email'],
-            AccountRecoverySetting={
-                'RecoveryMechanisms': [
-                    {
-                        'Priority': 1,
-                        'Name': 'verified_email'
-                    },
-                ]
-            },
-            Schema=[
-                {
-                    'Name': 'email',
-                    'AttributeDataType': 'String',
-                    'Required': True,                    
-                },
-                {
-                    'Name': 'tenantId',
-                    'AttributeDataType': 'String',
-                    'Required': False,                    
-                },            
-                {
-                    'Name': 'userRole',
-                    'AttributeDataType': 'String',
-                    'Required': False,                    
-                }
-            ],
-            AdminCreateUserConfig={
-                'InviteMessageTemplate': {
-                    'EmailMessage': email_message,
-                    'EmailSubject': email_subject
-                }
-            }
-        )    
-        return response
+# class UserManagement:
+#     def create_user_pool(self, tenant_id):
+#         application_site_url = os.environ['TENANT_USER_POOL_CALLBACK_URL']
+#         email_message = ''.join(["Login into tenant UI application at ", 
+#                         application_site_url,
+#                         " with username {username} and temporary password {####}"])
+#         email_subject = "Your temporary password for tenant UI application"  
+#         response = client.create_user_pool(
+#             PoolName= tenant_id + '-ServerlessSaaSUserPool',
+#             AutoVerifiedAttributes=['email'],
+#             AccountRecoverySetting={
+#                 'RecoveryMechanisms': [
+#                     {
+#                         'Priority': 1,
+#                         'Name': 'verified_email'
+#                     },
+#                 ]
+#             },
+#             Schema=[
+#                 {
+#                     'Name': 'email',
+#                     'AttributeDataType': 'String',
+#                     'Required': True,                    
+#                 },
+#                 {
+#                     'Name': 'tenantId',
+#                     'AttributeDataType': 'String',
+#                     'Required': False,                    
+#                 },            
+#                 {
+#                     'Name': 'userRole',
+#                     'AttributeDataType': 'String',
+#                     'Required': False,                    
+#                 }
+#             ],
+#             AdminCreateUserConfig={
+#                 'InviteMessageTemplate': {
+#                     'EmailMessage': email_message,
+#                     'EmailSubject': email_subject
+#                 }
+#             }
+#         )    
+#         return response
 
-    def create_user_pool_client(self, user_pool_id):
-        user_pool_callback_url = os.environ['TENANT_USER_POOL_CALLBACK_URL']
-        response = client.create_user_pool_client(
-            UserPoolId= user_pool_id,
-            ClientName= 'ServerlessSaaSClient',
-            GenerateSecret= False,
-            AllowedOAuthFlowsUserPoolClient= True,
-            AllowedOAuthFlows=[
-                'code', 'implicit'
-            ],
-            SupportedIdentityProviders=[
-                'COGNITO',
-            ],
-            CallbackURLs=[
-                user_pool_callback_url,
-            ],
-            LogoutURLs= [
-                user_pool_callback_url,
-            ],
-            AllowedOAuthScopes=[
-                'email',
-                'openid',
-                'profile'
-            ],
-            WriteAttributes=[
-                'email',
-                'custom:tenantId'
-            ]
-        )
-        return response
+#     def create_user_pool_client(self, user_pool_id):
+#         user_pool_callback_url = os.environ['TENANT_USER_POOL_CALLBACK_URL']
+#         response = client.create_user_pool_client(
+#             UserPoolId= user_pool_id,
+#             ClientName= 'ServerlessSaaSClient',
+#             GenerateSecret= False,
+#             AllowedOAuthFlowsUserPoolClient= True,
+#             AllowedOAuthFlows=[
+#                 'code', 'implicit'
+#             ],
+#             SupportedIdentityProviders=[
+#                 'COGNITO',
+#             ],
+#             CallbackURLs=[
+#                 user_pool_callback_url,
+#             ],
+#             LogoutURLs= [
+#                 user_pool_callback_url,
+#             ],
+#             AllowedOAuthScopes=[
+#                 'email',
+#                 'openid',
+#                 'profile'
+#             ],
+#             WriteAttributes=[
+#                 'email',
+#                 'custom:tenantId'
+#             ]
+#         )
+#         return response
 
-    def create_user_pool_domain(self, user_pool_id, tenant_id):
-        response = client.create_user_pool_domain(
-            Domain= tenant_id + '-serverlesssaas',
-            UserPoolId=user_pool_id
-        )
-        return response
+#     def create_user_pool_domain(self, user_pool_id, tenant_id):
+#         response = client.create_user_pool_domain(
+#             Domain= tenant_id + '-serverlesssaas',
+#             UserPoolId=user_pool_id
+#         )
+#         return response
 
-    def create_user_group(self, user_pool_id, group_name, group_description):
-        response = client.create_group(
-            GroupName=group_name,
-            UserPoolId=user_pool_id,
-            Description= group_description,
-            Precedence=0
-        )
-        return response
+#     def create_user_group(self, user_pool_id, group_name, group_description):
+#         response = client.create_group(
+#             GroupName=group_name,
+#             UserPoolId=user_pool_id,
+#             Description= group_description,
+#             Precedence=0
+#         )
+#         return response
 
-    def create_tenant_admin(self, user_pool_id, tenant_admin_user_name, user_details):
-        response = client.admin_create_user(
-            Username=tenant_admin_user_name,
-            UserPoolId=user_pool_id,
-            ForceAliasCreation=True,
-            UserAttributes=[
-                {
-                    'Name': 'email',
-                    'Value': user_details['tenantEmail']
-                },
-                {
-                    'Name': 'email_verified',
-                    'Value': 'true'
-                },
-                {
-                    'Name': 'custom:userRole',
-                    'Value': 'TenantAdmin' 
-                },            
-                {
-                    'Name': 'custom:tenantId',
-                    'Value': user_details['tenantId']
-                }
-            ]
-        )
-        return response
+#     def create_tenant_admin(self, user_pool_id, tenant_admin_user_name, user_details):
+#         response = client.admin_create_user(
+#             Username=tenant_admin_user_name,
+#             UserPoolId=user_pool_id,
+#             ForceAliasCreation=True,
+#             UserAttributes=[
+#                 {
+#                     'Name': 'email',
+#                     'Value': user_details['tenantEmail']
+#                 },
+#                 {
+#                     'Name': 'email_verified',
+#                     'Value': 'true'
+#                 },
+#                 {
+#                     'Name': 'custom:userRole',
+#                     'Value': 'TenantAdmin' 
+#                 },            
+#                 {
+#                     'Name': 'custom:tenantId',
+#                     'Value': user_details['tenantId']
+#                 }
+#             ]
+#         )
+#         return response
 
-    def add_user_to_group(self, user_pool_id, user_name, group_name):
-        response = client.admin_add_user_to_group(
-            UserPoolId=user_pool_id,
-            Username=user_name,
-            GroupName=group_name
-        )
-        return response
+#     def add_user_to_group(self, user_pool_id, user_name, group_name):
+#         response = client.admin_add_user_to_group(
+#             UserPoolId=user_pool_id,
+#             Username=user_name,
+#             GroupName=group_name
+#         )
+#         return response
 
-    def create_user_tenant_mapping(self, user_name, tenant_id):
-        response = table_tenant_user_map.put_item(
-                Item={
-                        'tenantId': tenant_id,
-                        'userName': user_name
-                    }
-                )                    
+#     def create_user_tenant_mapping(self, user_name, tenant_id):
+#         response = table_tenant_user_map.put_item(
+#                 Item={
+#                         'tenantId': tenant_id,
+#                         'userName': user_name
+#                     }
+#                 )                    
 
-        return response
+#         return response
 
 
 class UserInfo:
