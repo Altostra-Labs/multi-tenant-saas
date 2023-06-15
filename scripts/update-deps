@@ -9,6 +9,6 @@ function install-dir () {
 
 
 install-dir ./src
-install-dir ./src/custom_resources
-install-dir ./src/TenantManagementService
-install-dir ./src/Resources
+install-dir ./functions/custom_resources
+install-dir ./functions/TenantManagementService
+install-dir ./functions/Resources

@@ -148,7 +148,7 @@
 					"name": "SharedServicesAuthorizerFunction",
 					"memory": 256,
 					"timeout": 29,
-					"entryPoint": "src/Resources/shared_service_authorizer.lambda_handler",
+					"entryPoint": "functions/Resources/shared_service_authorizer.lambda_handler",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -196,7 +196,7 @@
 					"name": "CreateTenantAdminUserFunction",
 					"memory": 512,
 					"timeout": 6,
-					"entryPoint": "src/TenantManagementService/user-management.create_tenant_admin_user",
+					"entryPoint": "functions/TenantManagementService/user-management.create_tenant_admin_user",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -241,7 +241,7 @@
 					"name": "CreateUserFunction",
 					"memory": 256,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/user-management.create_user",
+					"entryPoint": "functions/TenantManagementService/user-management.create_user",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -266,7 +266,7 @@
 					"name": "UpdateUserFunction",
 					"memory": 256,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/user-management.update_user",
+					"entryPoint": "functions/TenantManagementService/user-management.update_user",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -291,7 +291,7 @@
 					"name": "DisableUserFunction",
 					"memory": 256,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/user-management.disable_user",
+					"entryPoint": "functions/TenantManagementService/user-management.disable_user",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -316,7 +316,7 @@
 					"name": "DisableUsersByTenantFunction",
 					"memory": 256,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/user-management.disable_user",
+					"entryPoint": "functions/TenantManagementService/user-management.disable_user",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -341,7 +341,7 @@
 					"name": "EnableUsersByTenantFunction",
 					"memory": 256,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/user-management.enable_users_by_tenant",
+					"entryPoint": "functions/TenantManagementService/user-management.enable_users_by_tenant",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -366,7 +366,7 @@
 					"name": "GetUserFunction",
 					"memory": 256,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/user-management.get_user",
+					"entryPoint": "functions/TenantManagementService/user-management.get_user",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -391,7 +391,7 @@
 					"name": "GetUsersFunction",
 					"memory": 256,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/user-management.get_users",
+					"entryPoint": "functions/TenantManagementService/user-management.get_users",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -416,7 +416,7 @@
 					"name": "CreateTenantFunction",
 					"memory": 512,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/tenant-management.create_tenant",
+					"entryPoint": "functions/TenantManagementService/tenant-management.create_tenant",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -441,7 +441,7 @@
 					"name": "ActivateTenantFunction",
 					"memory": 512,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/tenant-management.activate_tenant",
+					"entryPoint": "functions/TenantManagementService/tenant-management.activate_tenant",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -468,7 +468,7 @@
 					"name": "GetTenantFunction",
 					"memory": 512,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/tenant-management.get_tenant",
+					"entryPoint": "functions/TenantManagementService/tenant-management.get_tenant",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -493,7 +493,7 @@
 					"name": "DeactivateTenantFunction",
 					"memory": 512,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/tenant-management.deactivate_tenant",
+					"entryPoint": "functions/TenantManagementService/tenant-management.deactivate_tenant",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -520,7 +520,7 @@
 					"name": "UpdateTenantFunction",
 					"memory": 512,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/tenant-management.update_tenant",
+					"entryPoint": "functions/TenantManagementService/tenant-management.update_tenant",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -549,7 +549,7 @@
 					"name": "GetTenantsFunction",
 					"memory": 512,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/tenant-management.get_tenants",
+					"entryPoint": "functions/TenantManagementService/tenant-management.get_tenants",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -572,7 +572,7 @@
 					"name": "GetTenantConfigFunction",
 					"memory": 512,
 					"timeout": 29,
-					"entryPoint": "src/TenantManagementService/tenant-management.load_tenant_config",
+					"entryPoint": "functions/TenantManagementService/tenant-management.load_tenant_config",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -610,7 +610,7 @@
 					"name": "RegisterTenantFunction",
 					"memory": 512,
 					"timeout": 6,
-					"entryPoint": "src/TenantManagementService/tenant-registration.register_tenant",
+					"entryPoint": "functions/TenantManagementService/tenant-registration.register_tenant",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -641,7 +641,7 @@
 					"name": "ProvisionTenantFunction",
 					"memory": 512,
 					"timeout": 6,
-					"entryPoint": "src/TenantManagementService/tenant-provisioning.provision_tenant",
+					"entryPoint": "functions/TenantManagementService/tenant-provisioning.provision_tenant",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -664,7 +664,7 @@
 					"name": "DeProvisionTenantFunction",
 					"memory": 512,
 					"timeout": 6,
-					"entryPoint": "src/TenantManagementService/tenant-provisioning.deprovision_tenant",
+					"entryPoint": "functions/TenantManagementService/tenant-provisioning.deprovision_tenant",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -687,7 +687,7 @@
 					"name": "UpdateSettingsTableFunction",
 					"memory": 512,
 					"timeout": 6,
-					"entryPoint": "src/custom_resources/update_settings_table.handler",
+					"entryPoint": "functions/custom_resources/update_settings_table.handler",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -713,7 +713,7 @@
 					"name": "UpdateTenantStackMapTableFunction",
 					"memory": 512,
 					"timeout": 6,
-					"entryPoint": "src/custom_resources/update_tenantstackmap_table.handler",
+					"entryPoint": "functions/custom_resources/update_tenantstackmap_table.handler",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
@@ -1067,7 +1067,7 @@
 					"name": "CORSOptionsHandler",
 					"memory": 256,
 					"timeout": 6,
-					"entryPoint": "src/cors_options_handler.handler",
+					"entryPoint": "functions/cors_options_handler.handler",
 					"runtime": "python3.9",
 					"endpointUrl": {
 						"enabled": false,
