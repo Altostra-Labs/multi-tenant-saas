@@ -2,8 +2,10 @@
 # SPDX-License-Identifier: MIT-0
 
 import json
+from AuthorizedUser import AuthorizedUser
 import boto3
 import os
+from tenant_management import tenant_creation, tenant_provisioning
 import utils
 import uuid
 import logger
@@ -51,21 +53,22 @@ def register_tenant(event, context):
         host = event['headers']['Host']
         auth = utils.get_auth(host, region)
         headers = utils.get_headers(event)
-        create_user_response = __create_tenant_admin_user(tenant_details, headers, auth, host, stage_name)
+        create_user_response = __create_tenant_admin_user(tenant_details)
         
         logger.info (create_user_response)
         tenant_details['userPoolId'] = create_user_response['message']['userPoolId']
         tenant_details['appClientId'] = create_user_response['message']['appClientId']
         tenant_details['tenantAdminUserName'] = create_user_response['message']['tenantAdminUserName']
 
-        create_tenant_response = __create_tenant(tenant_details, headers, auth, host, stage_name)
-        logger.info (create_tenant_response)
+        __create_tenant(tenant_details)
 
         if (tenant_details['dedicatedTenancy'].upper() == 'TRUE'):
             provision_tenant_response = __provision_tenant(tenant_details, headers, auth, host, stage_name)
             logger.info(provision_tenant_response)
 
-        
+    
+    except utils.ResponseError as e:
+        return e.response
     except Exception as e:
         err = Exception('Error registering a new tenant', e)
         logger.error(err)
@@ -92,27 +95,24 @@ def __create_tenant_admin_user(tenant_details, headers, auth, host, stage_name):
     else:
         return result
 
-def __create_tenant(tenant_details, headers, auth, host, stage_name):
+def __create_tenant(tenant_details):
     try:
-        url = ''.join(['https://', host, '/', stage_name, create_tenant_resource_path])
-        response = requests.post(url, data=json.dumps(tenant_details), auth=auth, headers=headers) 
-        response_json = response.json()
-    except Exception as e:
-        logger.error('Error occured while creating the tenant record in table')
-        raise Exception('Error occured while creating the tenant record in table', e) 
-    else:
-        return response_json
+        table_tenant_details = dynamodb.Table(os.environ['TABLE_TENANTDETAILSTABLE'])
+        table_system_settings = dynamodb.Table(os.environ['TABLE_SERVERLESSSAASSETTINGSTABLE'])
 
-def __provision_tenant(tenant_details, headers, auth, host, stage_name):
-    try:
-        url = ''.join(['https://', host, '/', stage_name, provision_tenant_resource_path])
-        logger.info(url)
-        response = requests.post(url, data=json.dumps(tenant_details), auth=auth, headers=headers) 
-        response_json = response.json()['message']
+        tenant_creation.create_tenant(
+            AuthorizedUser(tenant_details), 
+            tenant_details, 
+            table_tenant_details, 
+            table_system_settings,
+        )
     except Exception as e:
-        logger.error('Error occured while provisioning the tenant')
-        raise Exception('Error occured while creating the tenant record in table', e) 
-    else:
-        return response_json
+        err = Exception('Error occurred while creating the tenant record in table', e) 
+        logger.error(err)
+        raise err
+
+def __provision_tenant(tenant_details):
+    table_tenant_stack_mapping = dynamodb.Table(os.environ['TABLE_TENANTSTACKMAPPINGTABLE'])
+    tenant_provisioning.provision_tenant(tenant_details, table_tenant_stack_mapping)
 
               

@@ -95,7 +95,40 @@ def  encode_to_json_object(inputObject):
     jsonpickle.set_preferred_backend('simplejson')
     return jsonpickle.encode(inputObject, unpicklable=False, use_decimal=True)
 
+class ResponseError(Exception):
+    def __init__(
+            self, 
+            message: str,
+            status: int = 500,
+            headers: dict[str, str] = {},
+            body: dict[str, any] = {},
+            response: dict[str, any] = None
+            ):
+        super(message)
 
+        if (response is not None):
+            self.response = response
+        else:
+            if headers.get('Access-Control-Allow-Headers') is None:
+                headers['Access-Control-Allow-Headers'] = ', '.join([
+                    'Content-Type',
+                    'Origin',
+                    'X-Requested-With',
+                    'Accept',
+                    'Authorization',
+                    'Access-Control-Allow-Methods',
+                    'Access-Control-Allow-Headers',
+                    'Access-Control-Allow-Origin',
+                ])
 
+            if headers.get('Access-Control-Allow-Origin') is None:
+                headers['Access-Control-Allow-Origin'] = '*'
 
+            if headers.get('Access-Control-Allow-Methods') is None:
+                headers['Access-Control-Allow-Methods'] = 'OPTIONS,POST,GET,PUT,HEAD,DELETE'
 
+            self.response = {
+                'statusCode': status,
+                'headers': headers,
+                'body': body,
+            }

@@ -8,9 +8,10 @@ from botocore.exceptions import ClientError
 import logger
 import os
 from aws_lambda_powertools import Tracer
+import tenant_management.tenant_provisioning as tenant_provisioning
 tracer = Tracer()
 
-tenant_stack_mapping_table_name = os.environ['TENANT_STACK_MAPPING_TABLE_NAME']
+tenant_stack_mapping_table_name = os.environ['TABLE_TENANTSTACKMAPPINGTABLE']
 
 dynamodb = boto3.resource('dynamodb')
 codepipeline = boto3.client('codepipeline')
@@ -23,24 +24,11 @@ def provision_tenant(event, context):
     
     tenant_details = json.loads(event['body'])
     
-    try:          
-        response_ddb = table_tenant_stack_mapping.put_item(
-            Item={
-                    'tenantId': tenant_details['tenantId'],
-                    'stackName': stack_name.format(tenant_details['tenantId']),
-                    'applyLatestRelease': True,
-                    'codeCommitId': ''
-                }
-            )    
-        
-        logger.info(response_ddb)
+    try:
+       tenant_provisioning.provision_tenant(tenant_details, table_tenant_stack_mapping)
 
-        response_codepipeline = codepipeline.start_pipeline_execution(
-            name='serverless-saas-pipeline'
-        )
-
-        logger.info(response_ddb)
-
+    except utils.ResponseError as e:
+        return e.response
     except Exception as e:
         raise
     else:

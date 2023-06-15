@@ -3,6 +3,7 @@
 
 import os
 import json
+from AuthorizedUser import AuthorizedUser
 import boto3
 from boto3.dynamodb.conditions import Key
 import urllib.parse
@@ -13,6 +14,7 @@ import metrics_manager
 import auth_manager
 import requests
 from aws_requests_auth.aws_auth import AWSRequestsAuth
+import tenant_management.tenant_creation as tenant_creation
 
 from aws_lambda_powertools import Tracer
 tracer = Tracer()
@@ -22,50 +24,27 @@ region = os.environ['AWS_REGION']
 
 #This method has been locked down to be only
 def create_tenant(event, context):
-    auth = AuthorizedUser(event)
+    auth = AuthorizedUser(event['requestContext']['authorizer'])
 
-    if not auth.isSysAdmin():
-        return utils.create_unauthorized_response()
-
-    api_gateway_url = ''       
     tenant_details = json.loads(event['body'])
 
     dynamodb = boto3.resource('dynamodb')
-    #TODO: read table names from env vars
-    #TOODEELOO Altostra provides
+    # #TODO: read table names from env vars
+    # #TOODEELOO Altostra provides
     table_tenant_details = dynamodb.Table(os.environ['TABLE_TENANTDETAILSTABLE'])
     table_system_settings = dynamodb.Table(os.environ['TABLE_SERVERLESSSAASSETTINGSTABLE'])
 
-    try:          
-        # for pooled tenants the apigateway url is saving in settings during stack creation
-        # update from there during tenant creation
-        if(tenant_details['dedicatedTenancy'].lower() == 'true'):
-            return utils.create_unauthorized_response()
-
-        settings_response = table_system_settings.get_item(
-            Key={
-                'settingName': 'apiGatewayUrl-Pooled'
-            } 
+    try:
+        tenant_creation.create_tenant(
+            auth, 
+            tenant_details, 
+            table_tenant_details, 
+            table_system_settings,
         )
-        api_gateway_url = settings_response['Item']['settingValue']
+      
 
-        response = table_tenant_details.put_item(
-            Item={
-                    'tenantId': tenant_details['tenantId'],
-                    'tenantName' : tenant_details['tenantName'],
-                    'tenantAddress': tenant_details['tenantAddress'],
-                    'tenantEmail': tenant_details['tenantEmail'],
-                    'tenantPhone': tenant_details['tenantPhone'],
-                    'tenantTier': tenant_details['tenantTier'],
-                    'apiKey': tenant_details['apiKey'],
-                    'userPoolId': tenant_details['userPoolId'],                 
-                    'appClientId': tenant_details['appClientId'],
-                    'dedicatedTenancy': tenant_details['dedicatedTenancy'],
-                    'isActive': True,
-                    'apiGatewayUrl': api_gateway_url
-                }
-            )                    
-
+    except utils.ResponseError as e:
+        return e.response
     except Exception as e:
         raise Exception('Error creating a new tenant', e)
     else:
@@ -76,7 +55,7 @@ def get_tenants(event, context):
     table_tenant_details = __getTenantManagementTable(event)
 
     try:
-        authData = AuthorizedUser(event)
+        authData = AuthorizedUser(event['requestContext']['authorizer'])
         response = None
 
         if authData.isSysAdmin():
@@ -98,20 +77,6 @@ def get_tenants(event, context):
         raise Exception('Error getting all tenants', e)
     else:
         return utils.generate_response(response['Items'])    
-
-class AuthorizedUser:
-    def __init__(self, event) -> None:
-        authData = event['requestContext']['authorizer']
-        logger.info(authData)
-
-        self.userName = authData.get('userName')
-        self.tenantId = authData.get('tenantId')
-        self.userPoolId = authData.get('userPoolId')
-        self.apiKey = authData.get('apiKey')
-        self.userRole = authData.get('userRole')
-
-    def isSysAdmin(self) -> bool:
-        return self.userRole == 'SystemAdmin'
 
 @tracer.capture_lambda_handler
 def update_tenant(event, context):
