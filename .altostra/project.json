@@ -1138,6 +1138,11 @@
 						"type": "connection.access.policy-attachment",
 						"from": "AllowCognitoIDP",
 						"to": "GetUsersFunction"
+					},
+					"RegisterTenantFunction01": {
+						"type": "connection.access.policy-attachment",
+						"from": "AllowCognitoIDP",
+						"to": "RegisterTenantFunction01"
 					}
 				},
 				"CreateTenantAdminUserFunction01": {

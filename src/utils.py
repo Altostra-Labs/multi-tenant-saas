@@ -101,10 +101,13 @@ class ResponseError(Exception):
             message: str,
             status: int = 500,
             headers: dict[str, str] = {},
-            body: dict[str, any] = {},
+            body: dict[str, any] = None,
             response: dict[str, any] = None
             ):
-        super(message)
+        super().__init__(message)
+
+        if body is None:
+            body = { 'message': message }
 
         if (response is not None):
             self.response = response
@@ -130,5 +133,5 @@ class ResponseError(Exception):
             self.response = {
                 'statusCode': status,
                 'headers': headers,
-                'body': body,
+                'body': encode_to_json_object(body),
             }

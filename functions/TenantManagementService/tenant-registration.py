@@ -46,18 +46,15 @@ def register_tenant(event, context):
 
         logger.info(tenant_details)
 
-        stage_name = event['requestContext']['stage']
-        host = event['headers']['Host']
-        auth = utils.get_auth(host, region)
-        headers = utils.get_headers(event)
-        create_user_response = __create_tenant_admin_user(tenant_details)
+        create_user_response: dict[str, any] = __create_tenant_admin_user(tenant_details)
+        logger.info(create_user_response)
         
-        logger.info (create_user_response)
-        tenant_details['userPoolId'] = create_user_response['message']['userPoolId']
-        tenant_details['appClientId'] = create_user_response['message']['appClientId']
-        tenant_details['tenantAdminUserName'] = create_user_response['message']['tenantAdminUserName']
+        tenant_details['userPoolId'] = create_user_response['userPoolId']
+        tenant_details['appClientId'] = create_user_response['appClientId']
+        tenant_details['tenantAdminUserName'] = create_user_response['tenantAdminUserName']
 
-        __create_tenant(tenant_details)
+        authData = AuthorizedUser(event['requestContext']['authorizer'])
+        __create_tenant(tenant_details, authData)
 
         if (tenant_details['dedicatedTenancy'].upper() == 'TRUE'):
             provision_tenant_response = __provision_tenant(tenant_details)
@@ -68,7 +65,7 @@ def register_tenant(event, context):
         return e.response
     except Exception as e:
         err = Exception('Error registering a new tenant', e)
-        logger.error(err)
+        logger.error(e)
         raise err
     else:
         return utils.create_success_response("You have been registered in our system")
@@ -79,13 +76,15 @@ def __create_tenant_admin_user(tenant_details):
     table_tenant_user_map = dynamodb.Table(os.environ['TABLE_TENANTUSERMAPPINGTABLE'])
 
     try:
-        result = create_tenant_admin_user(
+        result: dict[str, any] = create_tenant_admin_user(
             tenant_details,
             tenant_user_pool_id,
             tenant_app_client_id,
             table_tenant_user_map,
             application_site_url= os.environ['TENANT_USER_POOL_CALLBACK_URL']
         )
+    except utils.ResponseError:
+        raise
     except Exception as e:
         err = Exception('Error occurred while calling the create tenant admin user service', e)
         logger.error(err)
@@ -93,17 +92,19 @@ def __create_tenant_admin_user(tenant_details):
     else:
         return result
 
-def __create_tenant(tenant_details):
+def __create_tenant(tenant_details, auth: AuthorizedUser):
     try:
         table_tenant_details = dynamodb.Table(os.environ['TABLE_TENANTDETAILSTABLE'])
         table_system_settings = dynamodb.Table(os.environ['TABLE_SERVERLESSSAASSETTINGSTABLE'])
 
         tenant_creation.create_tenant(
-            AuthorizedUser(tenant_details), 
+            auth, 
             tenant_details, 
             table_tenant_details, 
             table_system_settings,
         )
+    except utils.ResponseError:
+        raise
     except Exception as e:
         err = Exception('Error occurred while creating the tenant record in table', e) 
         logger.error(err)

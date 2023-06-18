@@ -1,5 +1,6 @@
 import logger
 from user_management import UserManagement
+from utils import ResponseError
 
 def create_tenant_admin_user(
   tenant_details,
@@ -14,6 +15,8 @@ def create_tenant_admin_user(
   user_mgmt = UserManagement()
 
   if (tenant_details['dedicatedTenancy'] == 'true'):
+      raise ResponseError('Dedicated tenants are not supported yet')
+
       user_pool_response = user_mgmt.create_user_pool(tenant_id, application_site_url)
       user_pool_id = user_pool_response['UserPool']['Id']
       logger.info (user_pool_id)

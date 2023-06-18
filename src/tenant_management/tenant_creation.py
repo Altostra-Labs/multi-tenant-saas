@@ -1,6 +1,6 @@
 from AuthorizedUser import AuthorizedUser
 from utils import ResponseError, create_unauthorized_response
-
+import logger
 
 def create_tenant(
   auth: AuthorizedUser,
@@ -8,6 +8,7 @@ def create_tenant(
   table_tenant_details,
   table_system_settings,
 ): 
+  logger.info(auth.userRole)
   if not auth.isSysAdmin():
     raise ResponseError(
        'Currently only sys-admins can create tenants',
