@@ -10,13 +10,15 @@ import metrics_manager
 import auth_manager
 from boto3.dynamodb.conditions import Key
 from aws_lambda_powertools import Tracer
-from user_management import UserManagement, create_tenant_admin_user as tenant_admin_creation
+import user_management.create_tenant_admin_user as tenant_admin_creation
+import user_management
+
 tracer = Tracer()
 
 client = boto3.client('cognito-idp')
 dynamodb = boto3.resource('dynamodb')
-table_tenant_user_map = dynamodb.Table('ServerlessSaaS-TenantUserMapping')
-table_tenant_details = dynamodb.Table('ServerlessSaaS-TenantDetails')
+table_tenant_user_map = dynamodb.Table(os.environ['TABLE_TENANTUSERMAPPINGTABLE'])
+table_tenant_details = dynamodb.Table(os.environ['TABLE_TENANTDETAILSTABLE'])
 
 def create_tenant_admin_user(event, context):
     table_tenant_user_map = dynamodb.Table(os.environ['TABLE_TENANTUSERMAPPINGTABLE'])
@@ -56,13 +58,21 @@ def create_user(event, context):
                 'tenantId': user_tenant_id
             }
         )
-        logger.info(tenant_details)
-        user_pool_id = tenant_details['Item']['userPoolId']    
+        logger.info({ 'tenant_details': tenant_details })
+
+        if tenant_details.get('Item') is None:
+            user_pool_id = os.environ['OPERATION_USERS_POOL_ID']
+        else:
+            user_pool_id = tenant_details['Item']['userPoolId']    
     else:
         user_tenant_id = tenant_id
 
     if (auth_manager.isTenantAdmin(user_role) or auth_manager.isSystemAdmin(user_role)):
         metrics_manager.record_metric(event, "UserCreated", "Count", 1)
+        logger.info({
+            'Username': user_details['userName'],
+            'UserPoolId': user_pool_id,
+        })
         response = client.admin_create_user(
             Username=user_details['userName'],
             UserPoolId=user_pool_id,
@@ -88,9 +98,12 @@ def create_user(event, context):
         )
         
         logger.log_with_tenant_context(event, response)
-        user_mgmt = UserManagement()
-        user_mgmt.add_user_to_group(user_pool_id, user_details['userName'], user_tenant_id)
-        response_mapping = user_mgmt.create_user_tenant_mapping(
+
+        group_name = (user_management.SYSTEM_ADMINS_GROUP
+                      if auth_manager.isSystemAdmin(user_role)
+                      else user_tenant_id )
+        user_management.add_user_to_group(user_pool_id, user_details['userName'], group_name)
+        response_mapping = user_management.create_user_tenant_mapping(
             user_details['userName'], 
             user_tenant_id, 
             table_tenant_user_map

@@ -256,6 +256,7 @@
 					],
 					"environment": {
 						"variables": {
+							"OPERATION_USERS_POOL_ID": "",
 							"POWERTOOLS_SERVICE_NAME": "UserManagement.CreateUser"
 						}
 					},
@@ -1832,7 +1833,8 @@
 				},
 				"CognitoOperationUsersUserPoolId": {
 					"paths": [
-						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_USER_POOL"
+						"resources/SharedServicesAuthorizerFunction01/environment/variables/OPERATION_USERS_USER_POOL",
+						"resources/CreateUserFunction01/environment/variables/OPERATION_USERS_POOL_ID"
 					]
 				},
 				"TENANT_USER_POOL_CALLBACK_URL": {
