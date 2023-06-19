@@ -17,7 +17,7 @@ region = os.environ['AWS_REGION']
 sts_client = boto3.client("sts", region_name=region)
 dynamodb = boto3.resource('dynamodb')
 table_tenant_details_name = os.environ['TABLE_TENANTDETAILSTABLE']
-table_tenant_details = dynamodb.Table('table_tenant_details_name')
+table_tenant_details = dynamodb.Table(table_tenant_details_name)
 user_pool_operation_user = os.environ['OPERATION_USERS_USER_POOL']
 app_client_operation_user = os.environ['OPERATION_USERS_APP_CLIENT']
 api_key_operation_user = os.environ['OPERATION_USERS_API_KEY']
