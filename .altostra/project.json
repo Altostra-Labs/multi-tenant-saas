@@ -22,11 +22,7 @@
 						}
 					},
 					"aws": {
-						"billingModel": "PROVISIONED",
-						"throughput": {
-							"readUnits": 5,
-							"writeUnits": 5
-						}
+						"billingModel": "PAY_PER_REQUEST"
 					},
 					"type": "resource.table"
 				},
@@ -41,11 +37,7 @@
 						}
 					},
 					"aws": {
-						"billingModel": "PROVISIONED",
-						"throughput": {
-							"readUnits": 5,
-							"writeUnits": 5
-						}
+						"billingModel": "PAY_PER_REQUEST"
 					},
 					"type": "resource.table"
 				},
@@ -75,19 +67,11 @@
 									"appClientId",
 									"apiGatewayUrl"
 								]
-							},
-							"throughput": {
-								"readUnits": 5,
-								"writeUnits": 5
 							}
 						}
 					],
 					"aws": {
-						"billingModel": "PROVISIONED",
-						"throughput": {
-							"readUnits": 5,
-							"writeUnits": 5
-						}
+						"billingModel": "PAY_PER_REQUEST"
 					},
 					"type": "resource.table"
 				},
@@ -120,19 +104,11 @@
 							},
 							"projection": {
 								"type": "table.index.projection.all"
-							},
-							"throughput": {
-								"readUnits": 5,
-								"writeUnits": 5
 							}
 						}
 					],
 					"aws": {
-						"billingModel": "PROVISIONED",
-						"throughput": {
-							"readUnits": 5,
-							"writeUnits": 5
-						}
+						"billingModel": "PAY_PER_REQUEST"
 					},
 					"type": "resource.table"
 				},
@@ -894,7 +870,8 @@
 						"type": "ref",
 						"id": "AdminApiGatewayApi"
 					},
-					"id": "ApiEndpoint07"
+					"id": "ApiEndpoint07",
+					"authorizer": null
 				},
 				"ApiEndpoint08": {
 					"type": "resource.api.endpoint",

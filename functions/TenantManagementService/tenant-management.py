@@ -277,7 +277,7 @@ def load_tenant_config(event, context):
     tenantName = urllib.parse.unquote(params['tenantname'])
 
     dynamodb = boto3.resource('dynamodb')
-    table_tenant_details = dynamodb.Table('ServerlessSaaS-TenantDetails')#TODO: read table names from env vars
+    table_tenant_details = dynamodb.Table(os.environ['TABLE_TENANTDETAILSTABLE'])
     
     try:
         response = table_tenant_details.query(

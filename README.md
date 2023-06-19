@@ -14,6 +14,7 @@ authenticate the request, and give lambdas fine-grained access
 - Authorizer must be lambda authorizer (rather than token)
 - No way to pass parameters to custom resources
 - No layers
+- Removed DynamoDB provisioned throughput (cheaper for development... could be changed back)
 
 ## Installation
 
